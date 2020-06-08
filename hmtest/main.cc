@@ -2108,31 +2108,39 @@ public:
     {
         switch (pEvent.type)
         {
-        case sgl::EVENT_MOUSE_AXIS_X:
-            mTemporaryCameraRotation += vec2(pEvent.delta, 0);
-            break;
-        case sgl::EVENT_MOUSE_AXIS_Y:
-            mTemporaryCameraRotation -= vec2(0, pEvent.delta);
-            break;
-        case sgl::EVENT_KEYDOWN:
-        case sgl::EVENT_KEYUP: {
-            bool isDown = (pEvent.type == sgl::EVENT_KEYDOWN);
-            switch (pEvent.k)
+        case SDL_MOUSEMOTION:
+            if(mousedown)
             {
-            case sgl::Key::W: in = isDown; break;
-            case sgl::Key::S: out = isDown; break;
-            case sgl::Key::A: left = isDown; break;
-            case sgl::Key::D: right = isDown; break;
-            case sgl::Key::Space: up = isDown; break;
-            case sgl::Key::Mouse_Right: grid.setEnable(isDown); break;
-            case sgl::Key::Mouse_Left:
+                mTemporaryCameraRotation += vec2(pEvent.motion.xrel, 0);
+                mTemporaryCameraRotation -= vec2(0, pEvent.motion.yrel);
+            }
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+            if(pEvent.button.button == SDL_BUTTON_LEFT)
+            {
+                mousedown = pEvent.type == SDL_MOUSEBUTTONDOWN;
+            }
+            break;
+        case SDL_KEYDOWN:
+        case SDL_KEYUP: {
+            bool isDown = (pEvent.type == SDL_KEYDOWN);
+            switch (pEvent.key.keysym.sym)
+            {
+            case SDLK_w: in = isDown; break;
+            case SDLK_s: out = isDown; break;
+            case SDLK_a: left = isDown; break;
+            case SDLK_d: right = isDown; break;
+            case SDLK_SPACE: up = isDown; break;
+            case SDLK_TAB: grid.setEnable(isDown); break;
+            case SDLK_q:
                 if (isDown)
                 {
                     grid.bang();
                 }
                 break;
-            case sgl::Key::Control: down = isDown; break;
-            case sgl::Key::F:
+            case SDLK_LCTRL: down = isDown; break;
+            case SDLK_f:
                 if (isDown)
                 {
                     light = !light;
@@ -2182,6 +2190,8 @@ private:
     bool right;
     bool up;
     bool down;
+
+    bool mousedown = false;
 
     World world;
 
@@ -2321,6 +2331,7 @@ int run()
     }
 
     cout << "Goodbye heightmap demo";
+    return 0;
 }
 
 
