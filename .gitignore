@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/*
+
+# clion build folder
+cmake-build-debug
+build
+.vscode
+
+# vi undo files
+*.un~
+
+# vi swap file
+*.swp
+
