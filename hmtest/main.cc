@@ -11,10 +11,12 @@
 #include <cassert>
 // #include "boost/tokenizer.h"
 // #include "boost/smart_ptr.h"
-// #include "IL/il.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include "SDL.h"
-#include "SDL_opengl.h"
+#include "GL/glew.h"
+// #include "SDL_opengl.h"
 
 #include "vec2.h"
 #include "vec3.h"
@@ -24,8 +26,8 @@
 
 using namespace std;
 
-int gWidth = 800;
-int gHeight = 600;
+constexpr int gWidth = 800;
+constexpr int gHeight = 600;
 
 constexpr bool ONLY_RENDER_WORLD = false;
 constexpr bool FULLSCREEN = false;
@@ -79,16 +81,13 @@ initOpenGL()
     //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    ilInit();
-    if (ilGetInteger(IL_VERSION_NUM) < IL_VERSION)
+    const auto glew_init = glewInit();
+    if (GLEW_OK != glew_init)
     {
-        cerr << "Devil version is different, compiled for: " << IL_VERSION
-             << " driver: " << ilGetInteger(IL_VERSION_NUM);
+      /* Problem: glewInit failed, something is seriously wrong. */
+      std::cerr << "Error: " << glewGetErrorString(glew_init);
+      return;
     }
-    ilEnable(IL_CONV_PAL);
-
-    ilEnable(IL_ORIGIN_SET);
-    ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
 
     doCheckOpengl();
 }
@@ -341,12 +340,15 @@ public:
     virtual ~State()
     {
     }
+
     virtual void
     render() = 0;
+
     virtual bool
     step(float pTime) = 0;
+
     virtual void
-    onEvent(sgl::Event& pEvent) = 0;
+    onEvent(const SDL_Event& pEvent) = 0;
 };
 
 
@@ -379,7 +381,7 @@ public:
         }
     }
     void
-    onEvent(sgl::Event& pEvent)
+    onEvent(const SDL_Event& pEvent)
     {
         if (!mStack.empty())
         {
@@ -563,23 +565,20 @@ class LoadedImage
 public:
     LoadedImage(Engine* pEngine, const ImageDescription& pDescription)
     {
-        ILuint ImageName;
-        ilGenImages(1, &ImageName);
-        ilBindImage(ImageName);
-        if (IL_FALSE == ilLoadImage(pDescription.getFile().c_str()))
+        int n = 0;
+        unsigned char *data = stbi_load(pDescription.getFile().c_str(), &width, &height, &n, 4);
+        if (data == nullptr)
         {
             cerr << "failed to load " << pDescription.getFile();
         }
         unsigned int tex = 0;
         glGenTextures(1, &tex);
         glBindTexture(GL_TEXTURE_2D, tex);
-        width = ilGetInteger(IL_IMAGE_WIDTH);
-        height = ilGetInteger(IL_IMAGE_HEIGHT);
-        glTexParameteri(
-                GL_TEXTURE_2D,
-                GL_TEXTURE_MIN_FILTER,
-                GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // todo(Gustav): add mimap?
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        /*
         gluBuild2DMipmaps(
                 GL_TEXTURE_2D,
                 GL_RGBA,
@@ -588,7 +587,8 @@ public:
                 ilGetInteger(IL_IMAGE_FORMAT),
                 GL_UNSIGNED_BYTE,
                 ilGetData());
-        ilDeleteImages(1, &ImageName);
+        */
+        stbi_image_free(data);
         imageId = tex;
     }
     ~LoadedImage()
@@ -603,8 +603,8 @@ public:
 
 private:
     unsigned int imageId;
-    unsigned int width;
-    unsigned int height;
+    int width;
+    int height;
 };
 
 
@@ -851,7 +851,7 @@ protected:
             std::vector<char> log;
             log.resize(len);
             glGetInfoLogARB(object, len, &read, &log[0]);
-            return std::string(log.get());
+            return std::string(&log[0]);
         }
         else
             return "";
@@ -1403,14 +1403,18 @@ struct Light : public CommonLightAttributes
 
 void
 splitString(
-        const std::string& splitString,
-        const std::string& str,
+        char delim,
+        const std::string& s,
         std::vector<std::string>* numbers)
 {
     assert(numbers);
-    boost::char_separator<char> sep(splitString.c_str());
-    boost::tokenizer<boost::char_separator<char>> tok(str, sep);
-    std::copy(tok.begin(), tok.end(), std::back_inserter(*numbers));
+    std::stringstream ss(s);
+    std::string       item;
+    auto result = std::back_inserter(*numbers);
+    while(std::getline(ss, item, delim))
+    {
+        *(result++) = item;
+    }
 }
 
 
@@ -1445,7 +1449,7 @@ Index
 toIndex(const std::string& str)
 {
     vector<std::string> indexData;
-    splitString("/", str, &indexData);
+    splitString('/', str, &indexData);
     if (indexData.size() != 3)
     {
         throw "missing something in index declearation (mesh)";
@@ -1494,7 +1498,7 @@ public:
         while (std::getline(f, line))
         {
             std::vector<std::string> commands;
-            splitString(" ", trim(line), &commands);
+            splitString(' ', trim(line), &commands);
             if (commands.size() > 0)
             {
                 const std::string type = trim(commands[0]);
@@ -2100,7 +2104,7 @@ public:
         mCameraRotation = pRot * mCameraRotation;
     }
     void
-    onEvent(sgl::Event& pEvent)
+    onEvent(const SDL_Event& pEvent)
     {
         switch (pEvent.type)
         {
@@ -2204,6 +2208,7 @@ public:
         mEngine->loadMedia();
         mToLoad = mEngine->getLoadCount();
     }
+
     void
     render()
     {
@@ -2220,6 +2225,7 @@ public:
         glEnd();
         glEnable(GL_TEXTURE_2D);
     }
+
     bool
     step(float pTime)
     {
@@ -2236,8 +2242,9 @@ public:
         }
         return true;
     }
+
     void
-    onEvent(sgl::Event& pEvent)
+    onEvent(const SDL_Event& pEvent)
     {
     }
 
@@ -2251,22 +2258,25 @@ private:
 };
 
 
-void
-main(const std::string& arg0)
+int run()
 {
     cout << "Hello gfx demo";
-    sgl::SetCaption("GFX demo");
-    if (FULLSCREEN)
-    {
-        sgl::SetVideoMode(sgl::VideoMode()
-                                  .setResolution(gWidth, gHeight)
-                                  .setFullscreen());
+
+    SDL_Window *win = SDL_CreateWindow("GFX demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, gWidth, gHeight, SDL_WINDOW_OPENGL);
+    if (win == nullptr){
+	    std::cout << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
+	    return 1;
     }
-    else
+
+    SDL_GLContext glcontext = SDL_GL_CreateContext(win);
+    if(glcontext == nullptr)
     {
-        sgl::SetVideoMode(
-                sgl::VideoMode().setResolution(gWidth, gHeight).setWindowed());
+        std::cout << "GL context error: " << SDL_GetError() << std::endl;
+	    return 1;
     }
+    SDL_GL_SetSwapInterval(1);
+
+
     initOpenGL();
 
     if (!GLEW_EXT_framebuffer_object)
@@ -2284,43 +2294,53 @@ main(const std::string& arg0)
     manager.addState(new Loading(&engine));
 
     bool running = true;
-    int oldTime = sgl::GetTicks();
+    auto oldTime = SDL_GetTicks();
     while (running)
     {
-        const int newTime = sgl::GetTicks();
-        const int timeSinceLastFrame = newTime - oldTime;
+        const auto newTime = SDL_GetTicks();
+        const auto timeSinceLastFrame = newTime - oldTime;
         oldTime = newTime;
-        const float delta = timeSinceLastFrame / sgl::GetTicksPerSecond();
+        const float delta = timeSinceLastFrame / 1000.0f;
         manager.step(delta);
 
         glClear(GL_COLOR_BUFFER_BIT);
         manager.render();
-        sgl::SwapBuffers();
+        SDL_GL_SwapWindow(win);
+        // sgl::ProcessAxis();
 
-        sgl::ProcessAxis();
-        sgl::Event event;
-        while (sgl::PollEvent(&event))
-        {
-            switch (event.type)
-            {
-            case sgl::EVENT_EXIT: running = false; break;
-            case sgl::EVENT_KEYDOWN:
-                if (event.k == sgl::Key::Escape)
-                {
-                    sgl::Exit();
-                }
-                else
-                {
-                    manager.onEvent(event);
-                }
-                break;
-            case sgl::EVENT_KEYUP: manager.onEvent(event); break;
-            case sgl::EVENT_MOUSE_AXIS_X:
-            case sgl::EVENT_MOUSE_AXIS_Y: manager.onEvent(event); break;
-            }
+        SDL_Event e;
+        while (SDL_PollEvent(&e)){
+	        if (e.type == SDL_QUIT){
+		        running = false;
+	        }
+	        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
+		        running = true;
+	        }
+	        manager.onEvent(e);
         }
     }
 
     cout << "Goodbye heightmap demo";
 }
 
+
+int main(int, char**)
+{
+    if (SDL_Init(SDL_INIT_VIDEO) != 0){
+		std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+
+    try
+    {
+        const auto r = run();
+        SDL_Quit();
+        return r;
+    }
+    catch(...)
+    {
+        std::cerr << "unknown error\n";
+        SDL_Quit();
+        return 12;
+    }
+}
