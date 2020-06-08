@@ -1,31 +1,43 @@
 #include "angle.h"
 #include "math.h"
 
-namespace convert {
-	const float
-	radToDeg(const float a) {
-		return a / math::ONE_DEG_IN_RADIAN;
-	}
-			
-	const float
-	degToRad(const float a){
-		return a * math::ONE_DEG_IN_RADIAN;
-	}
+namespace convert
+{
+const float
+radToDeg(const float a)
+{
+    return a / math::ONE_DEG_IN_RADIAN;
 }
 
-Angle Radian(float value) {
-	return Angle(value);
+const float
+degToRad(const float a)
+{
+    return a * math::ONE_DEG_IN_RADIAN;
 }
-Angle Degree(float value) {
-	return Angle(value, false);
-}
-
-Angle::Angle(float degrees, bool unused) : mRadians(convert::degToRad(degrees)) {
 }
 
-float Angle::inRadians() const {
-	return mRadians;
+Angle
+Radian(float value)
+{
+    return Angle(value);
 }
-float Angle::inDegrees() const {
-	return convert::radToDeg(mRadians);
+Angle
+Degree(float value)
+{
+    return Angle(value, false);
+}
+
+Angle::Angle(float degrees, bool unused) : mRadians(convert::degToRad(degrees))
+{
+}
+
+float
+Angle::inRadians() const
+{
+    return mRadians;
+}
+float
+Angle::inDegrees() const
+{
+    return convert::radToDeg(mRadians);
 }

@@ -1,17 +1,25 @@
 #ifndef ANGLE_HPP
 #define ANGLE_HPP
 
-class Angle {
+class Angle
+{
 public:
-	explicit Angle(float radians) : mRadians(radians) {}
-	Angle(float degrees, bool unused);
-	float inRadians() const ;
-	float inDegrees() const ;
+    explicit Angle(float radians) : mRadians(radians)
+    {
+    }
+    Angle(float degrees, bool unused);
+    float
+    inRadians() const;
+    float
+    inDegrees() const;
+
 private:
-	float mRadians;
+    float mRadians;
 };
 
-Angle Radian(float value);
-Angle Degree(float value);
+Angle
+Radian(float value);
+Angle
+Degree(float value);
 
 #endif
