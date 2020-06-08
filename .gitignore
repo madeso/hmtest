@@ -12,3 +12,6 @@ build
 # vi swap file
 *.swp
 
+dist/error.txt
+dist/log.txt
+

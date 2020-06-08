@@ -2116,7 +2116,7 @@ public:
             if(mousedown)
             {
                 mTemporaryCameraRotation += vec2(pEvent.motion.xrel, 0);
-                mTemporaryCameraRotation -= vec2(0, pEvent.motion.yrel);
+                mTemporaryCameraRotation += vec2(0, pEvent.motion.yrel);
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
@@ -2328,7 +2328,7 @@ int run()
 		        running = false;
 	        }
 	        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
-		        running = true;
+		        running = false;
 	        }
 	        manager.onEvent(e);
         }
