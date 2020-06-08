@@ -1,7 +1,7 @@
 set(app_src
   angle.cc angle.h
   main.cc
-  math.cc math.h
+  hmmath.cc hmmath.h
   quat.cc quat.h
   vec2.cc vec2.h
   vec3.cc vec3.h

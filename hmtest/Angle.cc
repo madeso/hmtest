@@ -1,31 +1,31 @@
-#include "Angle.hpp"
-#include "math.hpp"
+#include "angle.h"
+#include "math.h"
 
 namespace convert {
-	const sgl::real
-	radToDeg(const sgl::real a) {
+	const float
+	radToDeg(const float a) {
 		return a / math::ONE_DEG_IN_RADIAN;
 	}
 			
-	const sgl::real
-	degToRad(const sgl::real a){
+	const float
+	degToRad(const float a){
 		return a * math::ONE_DEG_IN_RADIAN;
 	}
 }
 
-Angle Radian(sgl::real value) {
+Angle Radian(float value) {
 	return Angle(value);
 }
-Angle Degree(sgl::real value) {
+Angle Degree(float value) {
 	return Angle(value, false);
 }
 
-Angle::Angle(sgl::real degrees, bool unused) : mRadians(convert::degToRad(degrees)) {
+Angle::Angle(float degrees, bool unused) : mRadians(convert::degToRad(degrees)) {
 }
 
-sgl::real Angle::inRadians() const {
+float Angle::inRadians() const {
 	return mRadians;
 }
-sgl::real Angle::inDegrees() const {
+float Angle::inDegrees() const {
 	return convert::radToDeg(mRadians);
 }

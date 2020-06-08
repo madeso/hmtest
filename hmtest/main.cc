@@ -1,4 +1,4 @@
-#include "sgl.hpp"
+#include "sgl.h"
 #include <iostream>
 #include <stack>
 #include <list>
@@ -7,16 +7,16 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
-#include "boost/tokenizer.hpp"
-#include "boost/smart_ptr.hpp"
+#include "boost/tokenizer.h"
+#include "boost/smart_ptr.h"
 #include "IL/il.h"
 
-#include "vec2.hpp"
-#include "vec3.hpp"
-#include "Quat.hpp"
+#include "vec2.h"
+#include "vec3.h"
+#include "quat.h"
 
 using namespace std;
-using sgl::real;
+using float;
 
 int gWidth = 800;
 int gHeight = 600;
@@ -88,14 +88,14 @@ void setDisplay2d() {
 	doCheckOpengl();
 }
 
-void renderVertex(sgl::real x, sgl::real y) {
+void renderVertex(float x, float y) {
 	glTexCoord2d(x, 1-y);
 	glVertex2d(x,y);
 }
 
 void renderFullscreenQuad() {
-	const sgl::real min = 0;
-	const sgl::real max = 1 - min;
+	const float min = 0;
+	const float max = 1 - min;
 	setDisplay2d();
 	glBegin(GL_QUADS);
 		renderVertex(min, min);
@@ -111,7 +111,7 @@ void setDisplay3d() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	// http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
-	gluPerspective(45.0f, sgl::real(gWidth)/sgl::real(gHeight), 0.5f, 100.0f);
+	gluPerspective(45.0f, float(gWidth)/float(gHeight), 0.5f, 100.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glEnable(GL_DEPTH_TEST);
@@ -647,20 +647,20 @@ private:
 	Image image;
 };
 
-sgl::real randomSign() {
+float randomSign() {
 	return (rand()%2==0) ? -1.0 : 1.0;
 }
 
-sgl::real randomRealWithoutSign() {
-	return sgl::real(rand())/sgl::real(RAND_MAX);
+float randomRealWithoutSign() {
+	return float(rand())/float(RAND_MAX);
 }
 
-sgl::real randomReal() {
-	const sgl::real sign = randomSign();
+float randomReal() {
+	const float sign = randomSign();
 	return sign * randomRealWithoutSign();
 }
 
-void edgeVertex(sgl::real x, sgl::real y) {
+void edgeVertex(float x, float y) {
 	glTexCoord2d(x, 1-y);
 	glVertex2d(x, y);
 }
@@ -671,10 +671,10 @@ void edgeVertex(sgl::real x, sgl::real y) {
 class GridRender {
 public:
 	GridRender(TextureRenderer* pRender) : renderer(pRender), isEnabled(false), accum(0.0) {
-		const sgl::real widthSpan = 1.0/(1+MIDDLE_WIDTH);
-		const sgl::real widthStart = widthSpan;
-		const sgl::real heightSpan = 1.0/(1+MIDDLE_HEIGHT);
-		const sgl::real heightStart = heightSpan;
+		const float widthSpan = 1.0/(1+MIDDLE_WIDTH);
+		const float widthStart = widthSpan;
+		const float heightSpan = 1.0/(1+MIDDLE_HEIGHT);
+		const float heightStart = heightSpan;
 		for(int x=0; x<MIDDLE_WIDTH; ++x) {
 			for(int y=0; y<MIDDLE_HEIGHT; ++y) {
 				array[x][y].init(vec2(widthStart + x*widthSpan, heightStart + y*heightSpan ));
@@ -685,15 +685,15 @@ public:
 	void render() {
 		setDisplay2d();
 
-		const sgl::real widthSpan = 1.0/(1+MIDDLE_WIDTH);
-		const sgl::real heightSpan = 1.0/(1+MIDDLE_HEIGHT);
+		const float widthSpan = 1.0/(1+MIDDLE_WIDTH);
+		const float heightSpan = 1.0/(1+MIDDLE_HEIGHT);
 		//glBindTexture(GL_TEXTURE_2D, image->getId());
 		renderer->bindImage();
 		glBegin(GL_QUADS);
 		{
-			sgl::real y = 0;
+			float y = 0;
 			for(int iy=0; iy<=MIDDLE_HEIGHT; ++iy) {
-				sgl::real x = 0;
+				float x = 0;
 				for(int ix=0; ix<=MIDDLE_WIDTH; ++ix) {
 					if( iy == 0 ) {
 						edgeVertex(x,y); edgeVertex(x+widthSpan,y);
@@ -755,7 +755,7 @@ public:
 	}
 	void bang() {
 		vec2 center(randomRealWithoutSign(), randomRealWithoutSign());
-		sgl::real force = 0.1 + randomRealWithoutSign() * 0.05;
+		float force = 0.1 + randomRealWithoutSign() * 0.05;
 		for(int x=0; x<MIDDLE_WIDTH; ++x) {
 			for(int y=0; y<MIDDLE_HEIGHT; ++y) {
 				array[x][y].bang( center, force, 3);
@@ -763,9 +763,9 @@ public:
 		}
 	}
 
-	void step(sgl::real pTime) {
+	void step(float pTime) {
 		if( isEnabled ) {
-			const sgl::real lim = 0.05;
+			const float lim = 0.05;
 			accum += pTime;
 			while( accum > lim ) {
 				accum -= lim;
@@ -775,8 +775,8 @@ public:
 			}
 		}
 
-		const sgl::real widthSpan = 1.0/(1+MIDDLE_WIDTH);
-		const sgl::real heightSpan = 1.0/(1+MIDDLE_HEIGHT);
+		const float widthSpan = 1.0/(1+MIDDLE_WIDTH);
+		const float heightSpan = 1.0/(1+MIDDLE_HEIGHT);
 		for(int x=0; x<MIDDLE_WIDTH; ++x) {
 			for(int y=0; y<MIDDLE_HEIGHT; ++y) {
 				array[x][y].step(pTime*3, MIDDLE_WIDTH/5.0, MIDDLE_HEIGHT/5.0, 0.05, 5.0);
@@ -793,11 +793,11 @@ private:
 	struct Dot {
 		Dot() : pos(0,0), start(0,0), vel(0,0), movement(0,0) {
 		}
-		void bang(const vec2& center, sgl::real power, sgl::real additionalForce) {
+		void bang(const vec2& center, float power, float additionalForce) {
 			const vec2 direction = pos - center;
-			const sgl::real length = direction.getLength();
+			const float length = direction.getLength();
 			if( length < power ) { // within blast radius
-				const sgl::real powerScale = (power - length)/power; // length to outer rim
+				const float powerScale = (power - length)/power; // length to outer rim
 				// ps range from 0-1 where 1 is center, and 0 outer rim
 				const vec2 force = direction.getNormalized() * math::square(math::sin(powerScale * math::PI/2));
 				addForce(force * additionalForce);
@@ -809,7 +809,7 @@ private:
 			vel = vec2(0,0);
 			movement = vec2(0,0);
 		}
-		void step(sgl::real time, sgl::real xlim, sgl::real ylim, sgl::real maxForce, sgl::real maxSpeed) {
+		void step(float time, float xlim, float ylim, float maxForce, float maxSpeed) {
 			const vec2 wantedVel = (start - pos).getTruncated(maxForce);
 			const vec2 suggestedVel = wantedVel - movement;
 			movement += suggestedVel * time;
@@ -819,22 +819,22 @@ private:
 			pos.setX( math::limitRange(start.getX()-xlim, pos.getX(), start.getX()+xlim) );
 			pos.setY( math::limitRange(start.getY()-ylim, pos.getY(), start.getY()+ylim) );
 		}
-		void stepArrival(sgl::real time, sgl::real xlim, sgl::real ylim, sgl::real maxForce, sgl::real maxSpeed) {
+		void stepArrival(float time, float xlim, float ylim, float maxForce, float maxSpeed) {
 			// arival behaviour
 
-			const sgl::real slowing_distance = 0.01;
+			const float slowing_distance = 0.01;
 
 			const vec2 target_offset = start - pos;
-			const sgl::real distance = target_offset.getLength();
-			const sgl::real ramped_speed = maxSpeed * (distance / slowing_distance);
-			const sgl::real clipped_speed = math::minimum(ramped_speed, maxSpeed);
-			const sgl::real ratio = math::equal7(0, distance)?0.0:(clipped_speed / distance);
+			const float distance = target_offset.getLength();
+			const float ramped_speed = maxSpeed * (distance / slowing_distance);
+			const float clipped_speed = math::minimum(ramped_speed, maxSpeed);
+			const float ratio = math::equal7(0, distance)?0.0:(clipped_speed / distance);
 			const vec2 desiredVel = target_offset * ratio;
 
 			//const vec2 desiredVel = (start - pos).getNormalized() * maxSpeed;
 			const vec2 steer = desiredVel - vel;
 			const vec2 force = steer.getTruncated(maxForce);
-			const sgl::real weight = 0.01;
+			const float weight = 0.01;
 			const vec2 acc = force / weight;
 			vel = (vel+acc*time).getTruncated(maxSpeed);
 			pos += vel * time + movement * time;
@@ -870,7 +870,7 @@ private:
 	};
 
 	Dot array[MIDDLE_WIDTH][MIDDLE_HEIGHT];
-	sgl::real accum;
+	float accum;
 };
 
 struct Attenuation {
@@ -991,9 +991,9 @@ struct Face {
 	Index indices[3];
 };
 
-sgl::real toReal(const std::string& str) {
+float toReal(const std::string& str) {
 	std::istringstream s(str);
-	sgl::real r;
+	float r;
 	s >> r;
 	return r;
 }
@@ -1060,7 +1060,7 @@ public:
 							shaderPointLight("shaders/light_point.vert", "shaders/light_point.frag"), shaderSpotLight("shaders/light_spot.vert", "shaders/light_spot.frag"), mesh("level.obj") {
 	}
 
-	void step(sgl::real pTime) {
+	void step(float pTime) {
 		waterDisp += pTime * 0.02;
 		if( waterDisp > 1 ) waterDisp -= 1;
 	}
@@ -1129,7 +1129,7 @@ protected:
 		glDisable(GL_BLEND);
 		glDepthFunc(GL_LEQUAL);
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-		sgl::real ambient = 0.0;
+		float ambient = 0.0;
 		glColor4d(ambient, ambient, ambient, 1);
 		drawScene(false, false);
 		glColor4d(1, 1, 1, 1);
@@ -1345,22 +1345,22 @@ protected:
 
 private:
 	// water displacement
-	sgl::real waterDisp;
+	float waterDisp;
 	//positive negative
-	const sgl::real px;
-	const sgl::real py;
-	const sgl::real pz;
+	const float px;
+	const float py;
+	const float pz;
 
-	const sgl::real nx;
-	const sgl::real ny;
-	const sgl::real nz;
+	const float nx;
+	const float ny;
+	const float nz;
 
-	const sgl::real wy; // water
-	const sgl::real by; // bottom
+	const float wy; // water
+	const float by; // bottom
 
 	// start end
-	const sgl::real zs;
-	const sgl::real ze;
+	const float zs;
+	const float ze;
 
 	Image wall;
 	Image water;
@@ -1413,7 +1413,7 @@ public:
 	bool step(real pTime) {
 		world.step(pTime);
 		grid.step(pTime);
-		const sgl::real speed = 2 * pTime;
+		const float speed = 2 * pTime;
 		if( in ) mCameraPosition += mCameraRotation.getIn() * speed;
 		if( out ) mCameraPosition -= mCameraRotation.getIn() * speed;
 		if( right ) mCameraPosition += mCameraRotation.getRight() * speed;
@@ -1421,7 +1421,7 @@ public:
 		if( up ) mCameraPosition += op::vec3::yAxisPositive * speed;
 		if( down ) mCameraPosition -= op::vec3::yAxisPositive * speed;
 
-		const sgl::real sensitivity = 0.005;
+		const float sensitivity = 0.005;
 
 		increaseRotation(Quat(-mCameraRotation.getRight(), Radian(mTemporaryCameraRotation.getY()*sensitivity)));
 		increaseRotation(Quat(op::vec3::yAxisNegative, Radian(mTemporaryCameraRotation.getX()*sensitivity)));
@@ -1553,11 +1553,11 @@ public:
 		glEnable(GL_TEXTURE_2D);
 	}
 	bool step(real pTime) {
-		const sgl::real SIZE = 0.1;
+		const float SIZE = 0.1;
 		mTime += pTime;
 		if( mTime > SIZE) {
 			mTime -= SIZE;
-			mProgress = ((sgl::real) mLoaded) / ((sgl::real) mToLoad);
+			mProgress = ((float) mLoaded) / ((float) mToLoad);
 			if( mLoaded >= mToLoad ) return false;
 			mEngine->processOne();
 			mLoaded += 1;
@@ -1572,8 +1572,8 @@ private:
 	std::size_t mLoaded;
 	std::size_t mToLoad;
 
-	sgl::real mProgress;
-	sgl::real mTime;
+	float mProgress;
+	float mTime;
 };
 
 
@@ -1606,7 +1606,7 @@ void SGL_main(const std::string& arg0) {
 		const int newTime = sgl::GetTicks();
 		const int timeSinceLastFrame = newTime - oldTime;
 		oldTime = newTime;
-		const sgl::real delta = timeSinceLastFrame / sgl::GetTicksPerSecond();
+		const float delta = timeSinceLastFrame / sgl::GetTicksPerSecond();
 		manager.step(delta);
 
 		glClear(GL_COLOR_BUFFER_BIT);

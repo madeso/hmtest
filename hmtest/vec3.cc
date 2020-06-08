@@ -1,8 +1,8 @@
-#include "vec3.hpp"
+#include "vec3.h"
 #include <cmath>
 #include <cassert>
 
-vec3::vec3(sgl::real x, sgl::real y, sgl::real z) {
+vec3::vec3(float x, float y, float z) {
 	setX(x);
 	setY(y);
 	setZ(z);
@@ -44,34 +44,34 @@ void vec3::operator-=(const vec3& vec) {
 	setY(getY()-vec.getY());
 	setZ(getZ()-vec.getZ());
 }
-void vec3::operator*=(sgl::real scalar) {
+void vec3::operator*=(float scalar) {
 	setX(getX()*scalar);
 	setY(getY()*scalar);
 	setZ(getZ()*scalar);
 }
-void vec3::operator/=(sgl::real scalar) {
+void vec3::operator/=(float scalar) {
 	(*this)*=(1/scalar);
 }
-const vec3 vec3::operator*(sgl::real scalar) const {
+const vec3 vec3::operator*(float scalar) const {
 	vec3 temp(*this);
 	temp*=scalar;
 	return temp;
 }
-const vec3 operator*(sgl::real scalar, const vec3& vec) {
+const vec3 operator*(float scalar, const vec3& vec) {
 	return vec*scalar;
 }
-const vec3 vec3::operator/(sgl::real scalar) const {
+const vec3 vec3::operator/(float scalar) const {
 	vec3 temp(*this);
 	temp/=scalar;
 	return temp;
 }
 
-sgl::real vec3::getDotProduct(const vec3& r) const {
+float vec3::getDotProduct(const vec3& r) const {
 	return getX()*r.getX() +
 		getY()*r.getY() +
 		getZ()*r.getZ();
 }
-sgl::real vec3::operator dot(const vec3& rexp) const {
+float vec3::operator dot(const vec3& rexp) const {
 	return getDotProduct(rexp);
 }
 
@@ -85,7 +85,7 @@ vec3 vec3::operator cross(const vec3& rexp) const {
 }
 
 // methods
-sgl::real vec3::getLengthSquared() const {
+float vec3::getLengthSquared() const {
 	return  math::square(getX())+
 			math::square(getY())+
 			math::square(getZ());
@@ -98,36 +98,36 @@ vec3 vec3::getNormalized() const {
 
 
 // getters
-const sgl::real vec3::getX() const {
+const float vec3::getX() const {
 	return data.x;
 }
-const sgl::real vec3::getY() const {
+const float vec3::getY() const {
 	return data.y;
 }
-const sgl::real vec3::getZ() const {
+const float vec3::getZ() const {
 	return data.z;
 }
 
 // setters
-void vec3::setX(sgl::real x) {
+void vec3::setX(float x) {
 	data.x = x;
 }
-void vec3::setY(sgl::real y) {
+void vec3::setY(float y) {
 	data.y = y;
 }
-void vec3::setZ(sgl::real z) {
+void vec3::setZ(float z) {
 	data.z = z;
 }
 
 // low-level accessors
-const sgl::real vec3::get(int member) const {
+const float vec3::get(int member) const {
 	return data.array[member];
 }
-void vec3::set(int member, sgl::real value) {
+void vec3::set(int member, float value) {
 	data.array[member] = value;
 }
 
-const sgl::real* vec3::getArray() const {
+const float* vec3::getArray() const {
 	return data.array;
 }
 
@@ -135,7 +135,7 @@ const bool vec3::operator==(const vec3& vec) const {
 	return math::equal(getX(), vec.getX()) && math::equal(getY(), vec.getY()) && math::equal(getZ(), vec.getZ());
 }
 
-sgl::real vec3::getLength() const {
+float vec3::getLength() const {
 	return math::squareRoot(getLengthSquared());
 }
 bool vec3::isUnit() const {
@@ -145,27 +145,27 @@ bool vec3::isZero() const {
 	return math::equal(0.0, getLengthSquared());
 }
 void vec3::normalize() {
-	const sgl::real len = getLength();
+	const float len = getLength();
 	if( math::equal(len, 0.0f) ) return;
 	(*this) /= len;
 }
 
 namespace op {
-	sgl::real vec3::lengthBetween(const ::vec3& from, const ::vec3& to) {
+	float vec3::lengthBetween(const ::vec3& from, const ::vec3& to) {
 		return (from-to).getLength();
 	}
-	sgl::real vec3::lengthBetweenSquared(const ::vec3& from, const ::vec3& to) {
+	float vec3::lengthBetweenSquared(const ::vec3& from, const ::vec3& to) {
 		return (from-to).getLengthSquared();
 	}
-	::vec3 vec3::getLinearInterpolation(const ::vec3& from, sgl::real value, const ::vec3& to) {
+	::vec3 vec3::getLinearInterpolation(const ::vec3& from, float value, const ::vec3& to) {
 		return (to-from)*value + from;
 	}
-	void vec3::getLinearInterpolation(const ::vec3& from, sgl::real value, const ::vec3& to, ::vec3* out) {
+	void vec3::getLinearInterpolation(const ::vec3& from, float value, const ::vec3& to, ::vec3* out) {
 		assert(out);
 		*out = getLinearInterpolation(from, value, to);
 	}
 
-	sgl::real vec3::getCosAngleBetween(const ::vec3& a, const ::vec3& b) {
+	float vec3::getCosAngleBetween(const ::vec3& a, const ::vec3& b) {
 		assert(a.isUnit());
 		assert(b.isUnit());
 		return a dot b;

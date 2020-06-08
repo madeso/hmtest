@@ -1,19 +1,17 @@
 #ifndef ANGLE_HPP
 #define ANGLE_HPP
 
-#include "sgl_types.hpp"
-
 class Angle {
 public:
-	explicit Angle(sgl::real radians) : mRadians(radians) {}
-	Angle(sgl::real degrees, bool unused);
-	sgl::real inRadians() const ;
-	sgl::real inDegrees() const ;
+	explicit Angle(float radians) : mRadians(radians) {}
+	Angle(float degrees, bool unused);
+	float inRadians() const ;
+	float inDegrees() const ;
 private:
-	sgl::real mRadians;
+	float mRadians;
 };
 
-Angle Radian(sgl::real value);
-Angle Degree(sgl::real value);
+Angle Radian(float value);
+Angle Degree(float value);
 
 #endif

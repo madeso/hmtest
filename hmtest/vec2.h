@@ -1,13 +1,13 @@
 #ifndef VEC2_HPP
 #define VEC2_HPP
 
-#include "vecop.hpp"
-#include "math.hpp"
+#include "vecop.h"
+#include "math.h"
 
 class vec2 {
 public:
 	// constructors
-	vec2(sgl::real x, sgl::real y);
+	vec2(float x, float y);
 
 	// operators
 	const vec2& operator=(const vec2& vec);
@@ -19,43 +19,43 @@ public:
 	const vec2 operator-() const;
 	const vec2 operator-(const vec2& vec) const;
 	void operator-=(const vec2& vec);
-	void operator*=(sgl::real scalar);
-	void operator/=(sgl::real scalar);
-	const vec2 operator*(sgl::real scalar) const;
-	friend inline const vec2 operator*(sgl::real scalar, const vec2& vec);
-	const vec2 operator/(sgl::real scalar) const;
+	void operator*=(float scalar);
+	void operator/=(float scalar);
+	const vec2 operator*(float scalar) const;
+	friend inline const vec2 operator*(float scalar, const vec2& vec);
+	const vec2 operator/(float scalar) const;
 
-	sgl::real getDotProduct(const vec2& r) const;
-	sgl::real operator dot(const vec2& rexp) const;
+	float getDotProduct(const vec2& r) const;
+	float operator dot(const vec2& rexp) const;
 
 	// methods
-	sgl::real getLengthSquared() const;
-	sgl::real getLength() const;
+	float getLengthSquared() const;
+	float getLength() const;
 	vec2 getNormalized() const;
 	void normalize();
 
 	// getters
-	const sgl::real getX() const;
-	const sgl::real getY() const;
+	const float getX() const;
+	const float getY() const;
 
 	// setters
-	void setX(sgl::real x);
-	void setY(sgl::real y);
+	void setX(float x);
+	void setY(float y);
 
 	// low-level accessors
-	const sgl::real get(int member) const;
-	void set(int member, sgl::real value);
+	const float get(int member) const;
+	void set(int member, float value);
 
-	void truncate(sgl::real l);
-	vec2 getTruncated(sgl::real l) const;
+	void truncate(float l);
+	vec2 getTruncated(float l) const;
 
-	const sgl::real* getArray() const;
+	const float* getArray() const;
 private:
 	union {
-		sgl::real array[2];
+		float array[2];
 		struct {
-			sgl::real x;
-			sgl::real y;
+			float x;
+			float y;
 		};
 	} data;
 };
