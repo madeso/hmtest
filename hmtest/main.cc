@@ -9,6 +9,7 @@
 #include <fstream>
 #include <sstream>
 #include <cassert>
+#include <memory>
 // #include "boost/tokenizer.h"
 // #include "boost/smart_ptr.h"
 #define STB_IMAGE_IMPLEMENTATION
