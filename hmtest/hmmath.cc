@@ -7,14 +7,14 @@
 
 namespace math
 {
-const bool
-logicXor(const bool a, const bool b)
+bool
+logicXor(bool a, bool b)
 {
     return a != b;
 }
 
-const float
-abs(const float a)
+ float
+abs(float a)
 {
     if (a > 0.0f)
         return a;
@@ -24,8 +24,8 @@ abs(const float a)
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-maximum(const float a, const float b)
+ float
+maximum(float a, float b)
 {
     if (a > b)
         return a;
@@ -35,8 +35,8 @@ maximum(const float a, const float b)
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-minimum(const float a, const float b)
+ float
+minimum(float a, float b)
 {
     if (a < b)
         return a;
@@ -46,96 +46,96 @@ minimum(const float a, const float b)
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-floor(const float a)
+ float
+floor(float a)
 {
     return std::floor(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-ceil(const float a)
+ float
+ceil(float a)
 {
     return std::ceil(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal(const float a, const float b)
+bool
+equal(float a, float b)
 {
     return equal5(a, b);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal0(const float a, const float b)
+bool
+equal0(float a, float b)
 {
     return abs(a - b) < 1.0f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal1(const float a, const float b)
+bool
+equal1(float a, float b)
 {
     return abs(a - b) < 0.1f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal2(const float a, const float b)
+bool
+equal2(float a, float b)
 {
     return abs(a - b) < 0.01f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal3(const float a, const float b)
+bool
+equal3(float a, float b)
 {
     return abs(a - b) < 0.001f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal4(const float a, const float b)
+bool
+equal4(float a, float b)
 {
     return abs(a - b) < 0.0001f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal5(const float a, const float b)
+bool
+equal5(float a, float b)
 {
     return abs(a - b) < 0.00001f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal6(const float a, const float b)
+bool
+equal6(float a, float b)
 {
     return abs(a - b) < 0.000001f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const bool
-equal7(const float a, const float b)
+bool
+equal7(float a, float b)
 {
     return abs(a - b) < 0.0000001f;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-clampZero(const float a)
+ float
+clampZero(float a)
 {
     if (0.005f > abs(a))
     {
@@ -149,8 +149,8 @@ clampZero(const float a)
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-limitRange(const float min, const float a, const float max)
+ float
+limitRange(float min, float a, float max)
 {
     if (a < min)
     {
@@ -171,8 +171,8 @@ limitRange(const float min, const float a, const float max)
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-wrapRange(const float min, const float a, const float max)
+ float
+wrapRange(float min, float a, float max)
 {
     assert(min < max);
     float f = a;
@@ -185,80 +185,80 @@ wrapRange(const float min, const float a, const float max)
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-square(const float a)
+ float
+square(float a)
 {
     return a * a;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-squareRoot(const float a)
+ float
+squareRoot(float a)
 {
     return sqrt(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-cube(const float a)
+ float
+cube(float a)
 {
     return a * a * a;
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-sin(const float a)
+ float
+sin(float a)
 {
     return std::sin(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-cos(const float a)
+ float
+cos(float a)
 {
     return std::cos(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-tan(const float a)
+ float
+tan(float a)
 {
     return std::tan(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-asin(const float a)
+ float
+asin(float a)
 {
     return std::asin(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-acos(const float a)
+ float
+acos(float a)
 {
     return std::acos(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-atan(const float a)
+ float
+atan(float a)
 {
     return std::atan(a);
 }
 
 // ----------------------------------------------------------------------------------------------------
 
-const float
-interpolate(const float p_from, float p_fromOrTo, float p_to)
+ float
+interpolate(float p_from, float p_fromOrTo, float p_to)
 {
     return p_from + (p_fromOrTo * (p_to - p_from));
 }

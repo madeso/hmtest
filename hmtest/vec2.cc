@@ -20,7 +20,7 @@ vec2::operator=(const vec2& vec)
 }
 
 
-const bool
+bool
 vec2::operator!=(const vec2& vec) const
 {
     return !(vec == (*this));
@@ -155,14 +155,14 @@ vec2::normalize()
 
 
 // getters
-const float
+float
 vec2::getX() const
 {
     return data.x;
 }
 
 
-const float
+float
 vec2::getY() const
 {
     return data.y;
@@ -213,7 +213,7 @@ vec2::getTruncated(float l) const
 
 
 // low-level accessors
-const float
+float
 vec2::get(int member) const
 {
     return data.array[member];
@@ -227,7 +227,7 @@ vec2::set(int member, float value)
 }
 
 
-const bool
+bool
 vec2::operator==(const vec2& vec) const
 {
     return math::equal(getX(), vec.getX()) && math::equal(getY(), vec.getY());

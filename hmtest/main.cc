@@ -27,8 +27,8 @@ using namespace std;
 int gWidth = 800;
 int gHeight = 600;
 
-const bool ONLY_RENDER_WORLD = false;
-const bool FULLSCREEN = false;
+constexpr bool ONLY_RENDER_WORLD = false;
+constexpr bool FULLSCREEN = false;
 //#define USE_FBO 1
 
 
@@ -120,8 +120,8 @@ renderVertex(float x, float y)
 void
 renderFullscreenQuad()
 {
-    const float min = 0;
-    const float max = 1 - min;
+    constexpr float min = 0;
+    constexpr float max = 1 - min;
     setDisplay2d();
     glBegin(GL_QUADS);
     renderVertex(min, min);
@@ -527,7 +527,7 @@ public:
 
 private:
     bool loaded;
-    const bool hardware;
+    bool hardware;
     Engine* engine;
 };
 

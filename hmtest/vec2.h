@@ -15,10 +15,10 @@ public:
     const vec2&
     operator=(const vec2& vec);
 
-    const bool
+    bool
     operator==(const vec2& vec) const;
 
-    const bool
+    bool
     operator!=(const vec2& vec) const;
 
     const vec2
@@ -73,10 +73,10 @@ public:
     normalize();
 
     // getters
-    const float
+    float
     getX() const;
 
-    const float
+    float
     getY() const;
 
     // setters
@@ -87,7 +87,7 @@ public:
     setY(float y);
 
     // low-level accessors
-    const float
+    float
     get(int member) const;
 
     void

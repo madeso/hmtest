@@ -3,97 +3,97 @@
 
 namespace math
 {
-const float PI = 3.1415926535898f;
+constexpr float PI = 3.1415926535898f;
 
-const float TWO_PI = PI * 2.0f;
+constexpr float TWO_PI = PI * 2.0f;
 
 //const real PI = 3.14159265358979323846f; // grabbed from a source - is it really needed
 
-const float ONE_DEG_IN_RADIAN = PI / 180;
+constexpr float ONE_DEG_IN_RADIAN = PI / 180;
 
-const bool
-logicXor(const bool a, const bool b);
+bool
+logicXor(bool a, bool b);
 
-const float
-abs(const float a);
+float
+abs(float a);
 
-const float
-maximum(const float a, const float b);
+float
+maximum(float a, float b);
 
-const float
-minimum(const float a, const float b);
+float
+minimum(float a, float b);
 
-const float
-floor(const float a);
+float
+floor(float a);
 
-const float
-ceil(const float a);
+float
+ceil(float a);
 
-const bool
-equal(const float a, const float b);
+bool
+equal(float a, float b);
 
-const bool
-equal0(const float a, const float b);
+bool
+equal0(float a, float b);
 
-const bool
-equal1(const float a, const float b);
+bool
+equal1(float a, float b);
 
-const bool
-equal2(const float a, const float b);
+bool
+equal2(float a, float b);
 
-const bool
-equal3(const float a, const float b);
+bool
+equal3(float a, float b);
 
-const bool
-equal4(const float a, const float b);
+bool
+equal4(float a, float b);
 
-const bool
-equal5(const float a, const float b);
+bool
+equal5(float a, float b);
 
-const bool
-equal6(const float a, const float b);
+bool
+equal6(float a, float b);
 
-const bool
-equal7(const float a, const float b);
+bool
+equal7(float a, float b);
 
-const float
-clampZero(const float a);
+float
+clampZero(float a);
 
-const float
-limitRange(const float min, const float a, const float max);
+float
+limitRange(float min, float a, float max);
 
-const float
-wrapRange(const float min, const float a, const float max);
+float
+wrapRange(float min, float a, float max);
 
-const float
-square(const float a);
+float
+square(float a);
 
-const float
-cube(const float a);
+float
+cube(float a);
 
-const float
-squareRoot(const float a);
+float
+squareRoot(float a);
 
-const float
-sin(const float a);
+float
+sin(float a);
 
-const float
-cos(const float a);
+float
+cos(float a);
 
-const float
-tan(const float a);
+float
+tan(float a);
 
-const float
-asin(const float a);
+float
+asin(float a);
 
-const float
-acos(const float a);
+float
+acos(float a);
 
-const float
-atan(const float a);
+float
+atan(float a);
 
-const float
-interpolate(const float p_from, float p_fromOrTo, float p_to);
+float
+interpolate(float p_from, float p_fromOrTo, float p_to);
 }
 
 #endif

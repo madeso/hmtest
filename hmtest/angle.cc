@@ -3,14 +3,14 @@
 
 namespace convert
 {
-const float
+float
 radToDeg(const float a)
 {
     return a / math::ONE_DEG_IN_RADIAN;
 }
 
 
-const float
+float
 degToRad(const float a)
 {
     return a * math::ONE_DEG_IN_RADIAN;
@@ -32,7 +32,7 @@ Degree(float value)
 }
 
 
-Angle::Angle(float degrees, bool unused) : mRadians(convert::degToRad(degrees))
+Angle::Angle(float degrees, bool) : mRadians(convert::degToRad(degrees))
 {
 }
 

@@ -10,7 +10,7 @@ class Quat
 public:
     Quat(const Quat& p_other);
 
-    Quat(const float p_x, const float p_y, const float p_z, const float p_w);
+    Quat(float p_x, float p_y, float p_z, float p_w);
 
     Quat(const vec3& axis, const Angle& theta);
 
@@ -21,7 +21,7 @@ public:
     ~Quat();
 
     void
-    setEuler(const float p_x, const float p_y, const float p_z);
+    setEuler(float p_x, float p_y, float p_z);
 
     void
     setRotation(const vec3& axis, const Angle& theta);
@@ -53,7 +53,7 @@ public:
     operator*(const Quat& a) const;
 
     void
-    set(const float p_x, const float p_y, const float p_z, const float p_w);
+    set(float p_x, float p_y, float p_z, float p_w);
 
     void
     set(const Quat& p_quat);
@@ -73,20 +73,20 @@ public:
     vec3
     getRight() const;
 
-    const float
+    float
     getX() const;
 
-    const float
+    float
     getY() const;
 
-    const float
+    float
     getZ() const;
 
-    const float
+    float
     getW() const;
 
     Quat
-    slerp(const Quat& p_to, const float p_time) const;
+    slerp(const Quat& p_to, float p_time) const;
 
     // glRotate(theta, axis.x, axis.y, axis.z)
     void

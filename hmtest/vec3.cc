@@ -21,7 +21,7 @@ vec3::operator=(const vec3& vec)
 }
 
 
-const bool
+bool
 vec3::operator!=(const vec3& vec) const
 {
     return !(vec == (*this));
@@ -166,21 +166,21 @@ vec3::getNormalized() const
 
 
 // getters
-const float
+float
 vec3::getX() const
 {
     return data.x;
 }
 
 
-const float
+float
 vec3::getY() const
 {
     return data.y;
 }
 
 
-const float
+float
 vec3::getZ() const
 {
     return data.z;
@@ -210,7 +210,7 @@ vec3::setZ(float z)
 
 
 // low-level accessors
-const float
+float
 vec3::get(int member) const
 {
     return data.array[member];
@@ -231,7 +231,7 @@ vec3::getArray() const
 }
 
 
-const bool
+bool
 vec3::operator==(const vec3& vec) const
 {
     return math::equal(getX(), vec.getX()) && math::equal(getY(), vec.getY()) &&

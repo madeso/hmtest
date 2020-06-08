@@ -6,7 +6,7 @@
 using namespace math;
 
 
-Quat::Quat(const float p_x, const float p_y, const float p_z, const float p_w)
+Quat::Quat(float p_x, float p_y, float p_z, float p_w)
 {
     set(p_x, p_y, p_z, p_w);
     normalize();
@@ -29,18 +29,6 @@ Quat::~Quat()
 {
 }
 
-
-#if 0
-		void Quat::toMatrix(Matrix& p_out) {
-			const float matrix[3][3] =
-			{
-				{1 - 2*m_y*2 - 2*m_z*2,		2*m_x*m_y - 2*m_w*m_z,		2*m_x*m_z + 2*m_w*m_y},
-				{2*m_x*m_y + 2*m_w*m_z,		1 - 2*m_x*2 - 2*m_z*2,		2*m_y*m_z - 2*m_w*m_x},
-				{2*m_x*m_z - 2*m_w*m_y,		2*m_y*m_z + 2*m_w*m_x,		1 - 2*m_x*2 - 2*m_y*2}
-			};
-			p_out.set(matrix);
-		}
-#endif
 
 float
 Quat::length() const
@@ -247,28 +235,28 @@ Quat::getRight() const
 }
 
 
-const float
+float
 Quat::getX() const
 {
     return m_x;
 }
 
 
-const float
+float
 Quat::getY() const
 {
     return m_y;
 }
 
 
-const float
+float
 Quat::getZ() const
 {
     return m_z;
 }
 
 
-const float
+float
 Quat::getW() const
 {
     return m_w;
@@ -366,118 +354,6 @@ Quat::fromMatrix3(const float mat[3][3])
 }
 
 
-// from math-faq
-/*void Quat::fromMatrix3(const float pMatrix[3][3]) {
-			const real trace = pMatrix[0][0] + pMatrix[1][1] + pMatrix[2][2] + 1;
-			#define mat(c, r) pMatrix[r][c]
-			if( trace>0.0f ) {
-				// instant calculation
-				const float s = 0.5f / squareRoot(trace);
-				m_w = 0.25f / s;
-				m_x = (mat(2, 1) - mat(1, 2)) * s;
-				m_y = (mat(0, 2) - mat(2, 0)) * s;
-				m_z = (mat(1, 0) - mat(0, 1)) * s;
-			}
-			else {
-				// diagonal is negative, identify the largest colum digital value
-				int col = 0;
-#define TEST_MATRIX(INDEX) if( pMatrix[col][col] < pMatrix[INDEX][INDEX]) col = INDEX
-				TEST_MATRIX(1);
-				TEST_MATRIX(2);
-#undef TEST_MATRIX
-				switch(col) {
-					case 0:
-						{
-							const real s  = squareRoot( 1.0f + pMatrix[0][0] - pMatrix[1][1] - pMatrix[2][2] ) * 2;
-							const real oneOverS = 1.0f / s;
-							m_x = 0.5f * oneOverS;
-							m_y = (mat(0, 1) + mat(1, 0) )  * oneOverS;
-							m_z = (mat(0, 2) + mat(2, 0) )  * oneOverS;
-							m_w = (mat(1, 2) + mat(2, 1) )  * oneOverS;
-						}
-						break;
-					case 1:
-						{
-						// something is wrong here
-							const real s  = squareRoot( 1.0f + pMatrix[1][1] - pMatrix[0][0] - pMatrix[2][2] ) * 2;
-							const real oneOverS = 1.0f / s;
-							m_x = (mat(0, 1) + mat(1, 0) )  * oneOverS;
-							m_y = 0.5f * oneOverS;
-							m_z = (mat(1, 2) + mat(2, 1) )  * oneOverS;
-							m_w = (mat(2, 0) + mat(0, 2) )  * oneOverS;
-						}
-						break;
-					case 2:
-						{
-							const real s  = squareRoot( 1.0f + pMatrix[2][2] - pMatrix[0][0] - pMatrix[1][1] ) * 2;
-							const real oneOverS = 1.0f / s;
-							m_x = (mat(0, 2) + mat(2, 0) )  * oneOverS;
-							m_y = (mat(1, 2) + mat(2, 1) )  * oneOverS;
-							m_z = 0.5f * oneOverS;
-							m_w = (mat(0, 1) + mat(1, 0) )  * oneOverS;
-						}
-						break;
-					default:
-						assert(0 && "This shouldn't happen, bad programming code before case");
-				}
-			}
-#undef mat
-		}*/
-
-
-/*Points in space, the physical things, are normally represented as 3 or 4
-    floats. The effect of a rotation on a collection of points can be
-    computed from the representation of the rotation, and here matrices seem
-    fastest, using three dot products. Using their own product twice,
-    quaternions are a bit less efficient. (They are usually converted to
-    matrices at the last minute.)
-        p2 = q p1 q^(-1)*/
-
-/*math::vec3 Quat::rotateVector(const std::vec3& p_vector) {
-			math::vec3 vector;
-			q^(-1) = [-V,w]/(V.V+ww)
-			q p1 q^(-1);
-		}*/
-
-/*		Sequences of rotations can be interpolated, so that the object being
-    turned is rotated to specific poses at specific times. This motivated
-    Ken Shoemake's early use of quaternions in computer graphics, as
-    published in 1985. He used an analog of linear interpolation (sometimes
-    called "lerp") that he called "Slerp", and also introduced an analog of
-    a piecewise Bezier curve. A few years later in some course notes he
-    described another curve variation he called "Squad", which still seems
-    to be popular. Later authors have proposed many alternatives.
-                            math::sin (1-t)A      math::sin tA
-        Slerp(q1,q2;t) = q1 ---------- + q2 ------, math::cos A = q1.q2
-                               math::sin A         math::sin A
-
-        Squad(q1,a1,b2,q2;t) = Slerp(Slerp(q1,q2;t),
-                                     Slerp(a1,b2;t);
-                                     2t(1-t))
-*/
-// http://www.faqs.org/faqs/graphics/algorithms-faq/
-
-#if 0
-		// from minorlogic in gamedev.net
-		inline void From2Vec( Quat& q, const vector3& from, const vector3& to ) {
-			vector3 c = cross(from, to);
-			float d = dot(from, to);
-			q.set( c.x, c.y, c.z, d + (float)sqrt( from.len_squared()*to.len_squared() ) );
-			// here we can take a 180 Deg case , "from" or "to" is 0 length
-			// by check that q.w close to 0
-			q.normalize();
-		}
-		//or simpler to understand :
-		inline void From2Vec( Quat& q, const vector3& from, const vector3& to ) {
-			vector3 c = cross(from, to);
-			float d = dot(from, to);
-			q.set( c.x, c.y, c.z, d );
-			q.normalize(); // prevent of "from" or "to" is not unit
-			q.w += 1.0f; // reducing angle by 2
-			q.normalize();
-		}
-#endif
-
 Quat
 Quat::slerp(const Quat& p_to, const float p_time) const
 {
@@ -489,7 +365,7 @@ Quat::slerp(const Quat& p_to, const float p_time) const
 
     float scaleFrom;
     float scaleTo;
-    const float DELTA = 0.0001f;
+    constexpr float DELTA = 0.0001f;
     if ((1.0f - cosOmega) > DELTA)
     {
         // regular slerp
@@ -512,54 +388,3 @@ Quat::slerp(const Quat& p_to, const float p_time) const
             (scaleFrom * m_z) + (scaleTo * p_to.m_z),
             (scaleFrom * m_w) + (scaleTo * p_to.m_w));
 }
-
-
-#if 0
-		// gamasutra quat article ref:
-		// http://www.gamasutra.com/features/19980703/quaternions_01.htm
-		QuatSlerp(QUAT * from, QUAT * to, float t, QUAT * res)
-		{
-			float         to1[4];
-			double        omega, cosom, sinom, scale0, scale1;
-
-
-			// calc cosine
-			cosom = from->x * to->x + from->y * to->y + from->z * to->z
-				+ from->w * to->w;
-
-
-			// adjust signs (if necessary)
-			if ( cosom <0.0 ){
-				cosom = -cosom;
-				to1[0] = - to->x;
-				to1[1] = - to->y;
-				to1[2] = - to->z;
-				to1[3] = - to->w;
-			}
-			else {
-				to1[0] = to->x;
-				to1[1] = to->y;
-				to1[2] = to->z;
-				to1[3] = to->w;
-			}
-
-			// calculate coefficients
-			if ( (1.0 - cosom) > DELTA ) {
-                // standard case (slerp)
-                omega = acos(cosom);
-                sinom = math::sin(omega);
-                scale0 = math::sin((1.0 - t) * omega) / sinom;
-                scale1 = math::sin(t * omega) / sinom;
-			} else {
-				// "from" and "to" quaternions are very close
-				//  ... so we can do a linear interpolation
-                scale0 = 1.0 - t;
-                scale1 = t;
-			}
-			// calculate final values
-			res->x = scale0 * from->x + scale1 * to1[0];
-			res->y = scale0 * from->y + scale1 * to1[1];
-			res->z = scale0 * from->z + scale1 * to1[2];
-			res->w = scale0 * from->w + scale1 * to1[3];
-		}
-#endif

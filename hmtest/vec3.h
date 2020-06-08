@@ -16,10 +16,10 @@ public:
     const vec3&
     operator=(const vec3& vec);
 
-    const bool
+    bool
     operator==(const vec3& vec) const;
 
-    const bool
+    bool
     operator!=(const vec3& vec) const;
 
     const vec3
@@ -82,13 +82,13 @@ public:
     isZero() const;
 
     // getters
-    const float
+    float
     getX() const;
 
-    const float
+    float
     getY() const;
 
-    const float
+    float
     getZ() const;
 
     // setters
@@ -102,7 +102,7 @@ public:
     setZ(float z);
 
     // low-level accessors
-    const float
+    float
     get(int member) const;
 
     void
