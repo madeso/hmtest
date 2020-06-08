@@ -419,7 +419,7 @@ Quat::fromMatrix3(const float mat[3][3])
 			q.set( c.x, c.y, c.z, d + (float)sqrt( from.len_squared()*to.len_squared() ) );
 			// here we can take a 180 Deg case , "from" or "to" is 0 length
 			// by check that q.w close to 0
-			q.normalize(); 
+			q.normalize();
 		}
 		//or simpler to understand :
 		inline void From2Vec( Quat& q, const vector3& from, const vector3& to ) {
@@ -428,7 +428,7 @@ Quat::fromMatrix3(const float mat[3][3])
 			q.set( c.x, c.y, c.z, d );
 			q.normalize(); // prevent of "from" or "to" is not unit
 			q.w += 1.0f; // reducing angle by 2
-			q.normalize(); 
+			q.normalize();
 		}
 #endif
 
@@ -467,20 +467,20 @@ Quat::slerp(const Quat& p_to, const float p_time) const
             (scaleFrom * m_w) + (scaleTo * p_to.m_w));
 }
 
-#if 0	
+#if 0
 		// gamasutra quat article ref:
 		// http://www.gamasutra.com/features/19980703/quaternions_01.htm
 		QuatSlerp(QUAT * from, QUAT * to, float t, QUAT * res)
 		{
 			float         to1[4];
 			double        omega, cosom, sinom, scale0, scale1;
-			
-			
+
+
 			// calc cosine
 			cosom = from->x * to->x + from->y * to->y + from->z * to->z
 				+ from->w * to->w;
-			
-			
+
+
 			// adjust signs (if necessary)
 			if ( cosom <0.0 ){
 				cosom = -cosom;
@@ -495,7 +495,7 @@ Quat::slerp(const Quat& p_to, const float p_time) const
 				to1[2] = to->z;
 				to1[3] = to->w;
 			}
-			
+
 			// calculate coefficients
 			if ( (1.0 - cosom) > DELTA ) {
                 // standard case (slerp)
@@ -503,8 +503,8 @@ Quat::slerp(const Quat& p_to, const float p_time) const
                 sinom = math::sin(omega);
                 scale0 = math::sin((1.0 - t) * omega) / sinom;
                 scale1 = math::sin(t * omega) / sinom;
-			} else {        
-				// "from" and "to" quaternions are very close 
+			} else {
+				// "from" and "to" quaternions are very close
 				//  ... so we can do a linear interpolation
                 scale0 = 1.0 - t;
                 scale1 = t;
