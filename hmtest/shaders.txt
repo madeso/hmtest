@@ -1,0 +1,16 @@
+water: reflection, refraction
+glow shader
+bloom shader
+poison shader
+flame shader
+"frame buffer distortion" / predator invisiblity
+lamp damm - noise + time
+enviroment map
+specular map
+
+nv shader
+blur shader
+lightning
+paralax mapping
+depth of field
+motion blur
