@@ -8,8 +8,13 @@ set(app_src
   vecop.h
 )
 
-source_group("" FILES ${app_src})
-add_executable(hmtest WIN32 MACOSX_BUNDLE ${app_src})
-target_include_directories(hmtest SYSTEM PRIVATE ${SDL2_INCLUDE_DIR})
-target_link_libraries(hmtest ${SDL2_LIBRARY})
+set(glew_src
+../external/glew/src/glew.c
+)
 
+
+source_group("" FILES ${app_src})
+source_group("glew" FILES ${glew_src})
+add_executable(hmtest WIN32 MACOSX_BUNDLE ${app_src} ${glew_src})
+target_include_directories(hmtest SYSTEM PRIVATE ${SDL2_INCLUDE_DIR})
+target_link_libraries(hmtest ${SDL2_LIBRARY} ${OPENGL_LIBRARIES})
