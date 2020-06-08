@@ -5,24 +5,30 @@
 
 using namespace math;
 
+
 Quat::Quat(const float p_x, const float p_y, const float p_z, const float p_w)
 {
     set(p_x, p_y, p_z, p_w);
     normalize();
 }
+
+
 Quat::Quat(const Quat& p_other)
 {
     set(p_other);
 }
+
 
 Quat::Quat()
 {
     setIdentity();
 }
 
+
 Quat::~Quat()
 {
 }
+
 
 #if 0
 		void Quat::toMatrix(Matrix& p_out) {
@@ -41,11 +47,15 @@ Quat::length() const
 {
     return squareRoot(lengthSquared());
 }
+
+
 float
 Quat::lengthSquared() const
 {
     return square(m_x) + square(m_y) + square(m_z) + square(m_w);
 }
+
+
 bool
 Quat::isUnit() const
 {
@@ -53,12 +63,14 @@ Quat::isUnit() const
     return equal(ls, 1.0f);
 }
 
+
 void
 Quat::setIdentity()
 {
     m_x = m_y = m_z = 0.0f;
     m_w = 1.0f;
 }
+
 
 void
 Quat::setEuler(const float p_x, const float p_y, const float p_z)
@@ -77,11 +89,14 @@ Quat::setEuler(const float p_x, const float p_y, const float p_z)
     normalize();
 }
 
+
 void
 Quat::conjugate()
 {
     set(-m_x, -m_y, -m_z, m_w);
 }
+
+
 Quat
 Quat::getConjugate() const
 {
@@ -89,6 +104,7 @@ Quat::getConjugate() const
     temp.conjugate();
     return temp;
 }
+
 
 const Quat&
 Quat::operator*=(const Quat& p_quat)
@@ -110,6 +126,7 @@ Quat::operator*=(const Quat& p_quat)
     return *this;
 }
 
+
 Quat
 Quat::operator*(const Quat& b) const
 {
@@ -117,6 +134,7 @@ Quat::operator*(const Quat& b) const
     temp *= b;
     return temp;
 }
+
 
 void
 Quat::set(const float p_x, const float p_y, const float p_z, const float p_w)
@@ -127,16 +145,20 @@ Quat::set(const float p_x, const float p_y, const float p_z, const float p_w)
     m_w = p_w;
     normalize();
 }
+
+
 void
 Quat::set(const Quat& p_quat)
 {
     set(p_quat.m_x, p_quat.m_y, p_quat.m_z, p_quat.m_w);
 }
 
+
 Quat::Quat(const vec3& angle, const Angle& theta)
 {
     setRotation(angle, theta);
 }
+
 
 void
 Quat::setRotation(const vec3& pAxis, const Angle& theta)
@@ -152,6 +174,7 @@ Quat::setRotation(const vec3& pAxis, const Angle& theta)
     m_w = cosHalfTheta;
     normalize();
 }
+
 
 void
 Quat::toAxisAngle(vec3* axis, Angle* theta) const
@@ -175,6 +198,7 @@ Quat::toAxisAngle(vec3* axis, Angle* theta) const
     const float l = axis->getLength();
 }
 
+
 float
 Quat::normalize()
 {
@@ -186,10 +210,12 @@ Quat::normalize()
     return l;
 }
 
+
 Quat::Quat(const vec3& vec)
 {
     set(vec.getX(), vec.getY(), vec.getZ(), 0.0f);
 }
+
 
 vec3
 Quat::rotateVectorAroundOrigin(const vec3& vec) const
@@ -199,42 +225,55 @@ Quat::rotateVectorAroundOrigin(const vec3& vec) const
     return vec3(result.m_x, result.m_y, result.m_z);
 }
 
+
 vec3
 Quat::getIn() const
 {
     return rotateVectorAroundOrigin(op::vec3::zAxisNegative);
 }
+
+
 vec3
 Quat::getUp() const
 {
     return rotateVectorAroundOrigin(op::vec3::yAxisPositive);
 }
+
+
 vec3
 Quat::getRight() const
 {
     return rotateVectorAroundOrigin(op::vec3::xAxisPositive);
 }
 
+
 const float
 Quat::getX() const
 {
     return m_x;
 }
+
+
 const float
 Quat::getY() const
 {
     return m_y;
 }
+
+
 const float
 Quat::getZ() const
 {
     return m_z;
 }
+
+
 const float
 Quat::getW() const
 {
     return m_w;
 }
+
 
 bool
 Quat::operator==(const Quat& pOther) const
@@ -244,11 +283,14 @@ Quat::operator==(const Quat& pOther) const
             math::equal(getZ(), pOther.getZ()) &&
             math::equal(getW(), pOther.getW());
 }
+
+
 bool
 Quat::operator!=(const Quat& pOther) const
 {
     return !(*this == pOther);
 }
+
 
 void
 Quat::lookAt(const vec3& pFrom, const vec3& pTo, const vec3& pUp)
@@ -256,6 +298,8 @@ Quat::lookAt(const vec3& pFrom, const vec3& pTo, const vec3& pUp)
     assert(pUp.isUnit());
     lookInDirection((pTo - pFrom).getNormalized(), pUp);
 }
+
+
 void
 Quat::lookInDirection(const vec3& pDirection, const vec3& pUp)
 {
@@ -271,6 +315,7 @@ Quat::lookInDirection(const vec3& pDirection, const vec3& pUp)
     const float mat[3][3] = {vecAsArray(v), vecAsArray(u), vecAsArray(n)};
     fromMatrix3(mat);
 }
+
 
 // this code is grabbed from somwhere
 // rework with my own code from mathfaq
@@ -319,6 +364,7 @@ Quat::fromMatrix3(const float mat[3][3])
         m_w = q[3];
     }
 }
+
 
 // from math-faq
 /*void Quat::fromMatrix3(const float pMatrix[3][3]) {
@@ -466,6 +512,7 @@ Quat::slerp(const Quat& p_to, const float p_time) const
             (scaleFrom * m_z) + (scaleTo * p_to.m_z),
             (scaleFrom * m_w) + (scaleTo * p_to.m_w));
 }
+
 
 #if 0
 		// gamasutra quat article ref:

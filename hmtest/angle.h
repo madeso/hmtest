@@ -7,9 +7,15 @@ public:
     explicit Angle(float radians) : mRadians(radians)
     {
     }
+
+
     Angle(float degrees, bool unused);
+
+
     float
     inRadians() const;
+
+
     float
     inDegrees() const;
 
@@ -19,7 +25,11 @@ private:
 
 Angle
 Radian(float value);
+
+
 Angle
 Degree(float value);
 
+
 #endif
+

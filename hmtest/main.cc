@@ -31,6 +31,7 @@ const bool ONLY_RENDER_WORLD = false;
 const bool FULLSCREEN = false;
 //#define USE_FBO 1
 
+
 void
 doCheckOpengl()
 {
@@ -53,6 +54,7 @@ doCheckOpengl()
         std::cerr << "Opengl error: " << error << value << std::endl;
     }
 }
+
 
 void
 initOpenGL()
@@ -91,6 +93,7 @@ initOpenGL()
     doCheckOpengl();
 }
 
+
 void
 setDisplay2d()
 {
@@ -105,12 +108,14 @@ setDisplay2d()
     doCheckOpengl();
 }
 
+
 void
 renderVertex(float x, float y)
 {
     glTexCoord2d(x, 1 - y);
     glVertex2d(x, y);
 }
+
 
 void
 renderFullscreenQuad()
@@ -128,6 +133,7 @@ renderFullscreenQuad()
     doCheckOpengl();
 }
 
+
 void
 setDisplay3d()
 {
@@ -142,6 +148,7 @@ setDisplay3d()
 
     doCheckOpengl();
 }
+
 
 #ifdef USE_FBO
 #pragma message("using fbo")
@@ -253,6 +260,7 @@ private:
     unsigned int img;
 };
 
+
 #else
 #pragma message("using glCopyTexImage")
 class TextureRenderer
@@ -315,6 +323,7 @@ private:
     unsigned int img;
 };
 
+
 #endif
 void
 rectangle(float x, float y, float w, float h)
@@ -324,6 +333,7 @@ rectangle(float x, float y, float w, float h)
     glVertex2d(x + w, y + h);
     glVertex2d(x + w, y);
 }
+
 
 class State
 {
@@ -338,6 +348,7 @@ public:
     virtual void
     onEvent(sgl::Event& pEvent) = 0;
 };
+
 
 class StateManager
 {
@@ -380,6 +391,7 @@ private:
     std::stack<std::shared_ptr<State>> mStack;
 };
 
+
 class Media;
 class LoadedImage;
 
@@ -406,6 +418,7 @@ public:
 private:
     const std::string mFile;
 };
+
 
 class Engine
 {
@@ -453,6 +466,7 @@ private:
             DescriptionImageMap;
     DescriptionImageMap mImages;
 };
+
 
 class Media
 {
@@ -517,6 +531,7 @@ private:
     Engine* engine;
 };
 
+
 template <class Type>
 class TemplateMedia : public Media
 {
@@ -541,6 +556,7 @@ public:
 protected:
     Type* mMedia;
 };
+
 
 class LoadedImage
 {
@@ -591,6 +607,7 @@ private:
     unsigned int height;
 };
 
+
 LoadedImage*
 Engine::getLoadedImage(const ImageDescription& pImageDesc)
 {
@@ -598,6 +615,8 @@ Engine::getLoadedImage(const ImageDescription& pImageDesc)
     mImages.insert(DescriptionImageMap::value_type(pImageDesc, image));
     return image.get();
 }
+
+
 void
 Engine::unloadLoadedImage(
         const ImageDescription& pImageDesc,
@@ -605,6 +624,7 @@ Engine::unloadLoadedImage(
 {
     mImages.erase(mImages.find(pImageDesc));
 }
+
 
 void
 Engine::unloadHardware()
@@ -622,6 +642,8 @@ Engine::unloadHardware()
         }
     }
 }
+
+
 void
 Engine::loadMedia()
 {
@@ -638,6 +660,8 @@ Engine::loadMedia()
         }
     }
 }
+
+
 void
 Engine::processOne()
 {
@@ -665,6 +689,7 @@ Engine::processOne()
         mLoadState = LS_UNDEFINED;
     }
 }
+
 
 class Image : public TemplateMedia<LoadedImage>
 {
@@ -700,6 +725,7 @@ private:
     const ImageDescription mImageDesc;
 };
 
+
 std::string
 loadFile(const std::string& pFileName)
 {
@@ -713,6 +739,7 @@ loadFile(const std::string& pFileName)
     }
     return "";
 }
+
 
 class Shader
 {
@@ -836,6 +863,7 @@ private:
     unsigned int program;
 };
 
+
 class Cube
 {
 public:
@@ -923,17 +951,20 @@ private:
     Image image;
 };
 
+
 float
 randomSign()
 {
     return (rand() % 2 == 0) ? -1.0 : 1.0;
 }
 
+
 float
 randomRealWithoutSign()
 {
     return float(rand()) / float(RAND_MAX);
 }
+
 
 float
 randomReal()
@@ -942,12 +973,14 @@ randomReal()
     return sign * randomRealWithoutSign();
 }
 
+
 void
 edgeVertex(float x, float y)
 {
     glTexCoord2d(x, 1 - y);
     glVertex2d(x, y);
 }
+
 
 #define MIDDLE_WIDTH 48
 #define MIDDLE_HEIGHT 32
@@ -1247,6 +1280,7 @@ private:
     float accum;
 };
 
+
 struct Attenuation
 {
     Attenuation();
@@ -1264,6 +1298,7 @@ struct Attenuation
     }
 };
 
+
 struct CommonLightAttributes
 {
     CommonLightAttributes();
@@ -1274,15 +1309,20 @@ struct CommonLightAttributes
 
     Attenuation attenuation;
 };
+
+
 CommonLightAttributes::CommonLightAttributes()
     : ambient(1.0f, 1.0f, 1.0f)
     , diffuse(1.0f, 1.0f, 1.0f)
     , specular(0.0f, 0.0f, 0.0f)
 {
 }
+
+
 Attenuation::Attenuation() : constant(0.1f), linear(0.1f), quadratic(0.005f)
 {
 }
+
 
 struct Material
 {
@@ -1340,6 +1380,7 @@ struct Material
     float mAlpha;
 };
 
+
 struct Light : public CommonLightAttributes
 {
     Light()
@@ -1359,6 +1400,7 @@ struct Light : public CommonLightAttributes
     int cutoff;
 };
 
+
 void
 splitString(
         const std::string& splitString,
@@ -1371,6 +1413,7 @@ splitString(
     std::copy(tok.begin(), tok.end(), std::back_inserter(*numbers));
 }
 
+
 std::string
 trim(const std::string& s, const std::string& drop = " ")
 {
@@ -1379,12 +1422,14 @@ trim(const std::string& s, const std::string& drop = " ")
     return r.erase(0, r.find_first_not_of(drop));
 }
 
+
 struct Index
 {
     unsigned int vertex;
     unsigned int normal;
     unsigned int tex;
 };
+
 
 int
 toInt(const std::string& str)
@@ -1394,6 +1439,7 @@ toInt(const std::string& str)
     s >> r;
     return r;
 }
+
 
 Index
 toIndex(const std::string& str)
@@ -1411,6 +1457,7 @@ toIndex(const std::string& str)
     return index;
 }
 
+
 struct Face
 {
     Face(Index a, Index b, Index c)
@@ -1422,6 +1469,7 @@ struct Face
     Index indices[3];
 };
 
+
 float
 toReal(const std::string& str)
 {
@@ -1430,6 +1478,7 @@ toReal(const std::string& str)
     s >> r;
     return r;
 }
+
 
 class Mesh
 {
@@ -1509,6 +1558,7 @@ private:
     std::vector<vec2> tex;
     std::list<Face> faces;
 };
+
 
 class World
 {
@@ -2139,6 +2189,8 @@ private:
 
     bool light;
 };
+
+
 class Loading : public State
 {
 public:
@@ -2271,3 +2323,4 @@ main(const std::string& arg0)
 
     cout << "Goodbye heightmap demo";
 }
+
