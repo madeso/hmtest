@@ -1,22 +1,28 @@
-#include "sgl.h"
+// #include "sgl.h"
 #include <iostream>
 #include <stack>
+#include <map>
 #include <list>
 #include <stack>
+#include <vector>
 #include <sstream>
 #include <fstream>
 #include <sstream>
 #include <cassert>
-#include "boost/tokenizer.h"
-#include "boost/smart_ptr.h"
-#include "IL/il.h"
+// #include "boost/tokenizer.h"
+// #include "boost/smart_ptr.h"
+// #include "IL/il.h"
+
+#include "SDL.h"
+#include "SDL_opengl.h"
 
 #include "vec2.h"
 #include "vec3.h"
 #include "quat.h"
 
+#define Assert(condition, message) assert((condition) && message)
+
 using namespace std;
-using float;
 
 int gWidth = 800;
 int gHeight = 600;
@@ -311,7 +317,7 @@ private:
 
 #endif
 void
-rectangle(real x, real y, real w, real h)
+rectangle(float x, float y, float w, float h)
 {
     glVertex2d(x, y);
     glVertex2d(x, y + h);
@@ -328,7 +334,7 @@ public:
     virtual void
     render() = 0;
     virtual bool
-    step(real pTime) = 0;
+    step(float pTime) = 0;
     virtual void
     onEvent(sgl::Event& pEvent) = 0;
 };
@@ -339,11 +345,11 @@ public:
     void
     addState(State* pState)
     {
-        boost::shared_ptr<State> state(pState);
+        std::shared_ptr<State> state(pState);
         mStack.push(state);
     }
     void
-    step(real pTime)
+    step(float pTime)
     {
         if (!mStack.empty())
         {
@@ -371,7 +377,7 @@ public:
     }
 
 private:
-    std::stack<boost::shared_ptr<State>> mStack;
+    std::stack<std::shared_ptr<State>> mStack;
 };
 
 class Media;
@@ -443,7 +449,7 @@ private:
         LS_LOADING,
         LS_UNLOADING
     } mLoadState;
-    typedef std::map<ImageDescription, boost::shared_ptr<LoadedImage>>
+    typedef std::map<ImageDescription, std::shared_ptr<LoadedImage>>
             DescriptionImageMap;
     DescriptionImageMap mImages;
 };
@@ -588,7 +594,7 @@ private:
 LoadedImage*
 Engine::getLoadedImage(const ImageDescription& pImageDesc)
 {
-    boost::shared_ptr<LoadedImage> image(new LoadedImage(this, pImageDesc));
+    std::shared_ptr<LoadedImage> image(new LoadedImage(this, pImageDesc));
     mImages.insert(DescriptionImageMap::value_type(pImageDesc, image));
     return image.get();
 }
@@ -815,8 +821,9 @@ protected:
         if (len > 0)
         {
             int read = 0;
-            boost::scoped_array<char> log(new char[len]);
-            glGetInfoLogARB(object, len, &read, log.get());
+            std::vector<char> log;
+            log.resize(len);
+            glGetInfoLogARB(object, len, &read, &log[0]);
             return std::string(log.get());
         }
         else
@@ -1490,9 +1497,9 @@ public:
     {
         for (int i = 0; i < 3; ++i)
         {
-            glNormal3dv(normals[face.indices[i].normal].getArray());
-            glTexCoord2dv(tex[face.indices[i].tex].getArray());
-            glVertex3dv(vertices[face.indices[i].vertex].getArray());
+            glNormal3fv(normals[face.indices[i].normal].getArray());
+            glTexCoord2fv(tex[face.indices[i].tex].getArray());
+            glVertex3fv(vertices[face.indices[i].vertex].getArray());
         }
     }
 
@@ -2005,7 +2012,7 @@ public:
         }
     }
     bool
-    step(real pTime)
+    step(float pTime)
     {
         world.step(pTime);
         grid.step(pTime);
@@ -2162,7 +2169,7 @@ public:
         glEnable(GL_TEXTURE_2D);
     }
     bool
-    step(real pTime)
+    step(float pTime)
     {
         const float SIZE = 0.1;
         mTime += pTime;
@@ -2193,7 +2200,7 @@ private:
 
 
 void
-SGL_main(const std::string& arg0)
+main(const std::string& arg0)
 {
     cout << "Hello gfx demo";
     sgl::SetCaption("GFX demo");
