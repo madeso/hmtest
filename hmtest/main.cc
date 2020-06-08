@@ -737,6 +737,10 @@ loadFile(const std::string& pFileName)
         file.close();
         return ret.str();
     }
+    else
+    {
+        std::cerr << "Failed to load " << pFileName << "\n";
+    }
     return "";
 }
 
@@ -2335,18 +2339,29 @@ int run()
 }
 
 
-int main(int, char**)
+int sdlmain()
 {
     if (SDL_Init(SDL_INIT_VIDEO) != 0){
 		std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
 		return 1;
 	}
-
     try
     {
         const auto r = run();
         SDL_Quit();
         return r;
+    }
+    catch(const std::string& str)
+    {
+        std::cerr << "ERROR: " << str << "\n";
+        SDL_Quit();
+        return 10;
+    }
+    catch(const char* const str)
+    {
+        std::cerr << "ERROR: " << str << "\n";
+        SDL_Quit();
+        return 10;
     }
     catch(...)
     {
@@ -2354,4 +2369,22 @@ int main(int, char**)
         SDL_Quit();
         return 12;
     }
+}
+
+int main(int, char**)
+{
+    std::ofstream out("log.txt");
+    std::streambuf *coutbuf = std::cout.rdbuf();
+    std::cout.rdbuf(out.rdbuf());
+
+    std::ofstream eout("error.txt");
+    std::streambuf *cerrbuf = std::cerr.rdbuf();
+    std::cerr.rdbuf(eout.rdbuf());
+
+    const auto r = sdlmain();
+    
+    std::cout.rdbuf(coutbuf);
+    std::cerr.rdbuf(cerrbuf);
+
+    return r;
 }
