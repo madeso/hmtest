@@ -85,9 +85,9 @@ initOpenGL()
     const auto glew_init = glewInit();
     if (GLEW_OK != glew_init)
     {
-      /* Problem: glewInit failed, something is seriously wrong. */
-      std::cerr << "Error: " << glewGetErrorString(glew_init);
-      return;
+        /* Problem: glewInit failed, something is seriously wrong. */
+        std::cerr << "Error: " << glewGetErrorString(glew_init);
+        return;
     }
 
     doCheckOpengl();
@@ -567,7 +567,12 @@ public:
     LoadedImage(Engine* pEngine, const ImageDescription& pDescription)
     {
         int n = 0;
-        unsigned char *data = stbi_load(pDescription.getFile().c_str(), &width, &height, &n, 4);
+        unsigned char* data = stbi_load(
+                pDescription.getFile().c_str(),
+                &width,
+                &height,
+                &n,
+                4);
         if (data == nullptr)
         {
             cerr << "failed to load " << pDescription.getFile();
@@ -578,7 +583,16 @@ public:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // todo(Gustav): add mimap?
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RGBA,
+                width,
+                height,
+                0,
+                GL_RGBA,
+                GL_UNSIGNED_BYTE,
+                data);
         /*
         gluBuild2DMipmaps(
                 GL_TEXTURE_2D,
@@ -1407,16 +1421,13 @@ struct Light : public CommonLightAttributes
 
 
 void
-splitString(
-        char delim,
-        const std::string& s,
-        std::vector<std::string>* numbers)
+splitString(char delim, const std::string& s, std::vector<std::string>* numbers)
 {
     assert(numbers);
     std::stringstream ss(s);
-    std::string       item;
+    std::string item;
     auto result = std::back_inserter(*numbers);
-    while(std::getline(ss, item, delim))
+    while (std::getline(ss, item, delim))
     {
         *(result++) = item;
     }
@@ -2114,7 +2125,7 @@ public:
         switch (pEvent.type)
         {
         case SDL_MOUSEMOTION:
-            if(mousedown)
+            if (mousedown)
             {
                 mTemporaryCameraRotation += vec2(pEvent.motion.xrel, 0);
                 mTemporaryCameraRotation += vec2(0, pEvent.motion.yrel);
@@ -2122,7 +2133,7 @@ public:
             break;
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
-            if(pEvent.button.button == SDL_BUTTON_LEFT)
+            if (pEvent.button.button == SDL_BUTTON_LEFT)
             {
                 mousedown = pEvent.type == SDL_MOUSEBUTTONDOWN;
             }
@@ -2273,21 +2284,29 @@ private:
 };
 
 
-int run()
+int
+run()
 {
     cout << "Hello gfx demo";
 
-    SDL_Window *win = SDL_CreateWindow("GFX demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, gWidth, gHeight, SDL_WINDOW_OPENGL);
-    if (win == nullptr){
-	    std::cout << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
-	    return 1;
+    SDL_Window* win = SDL_CreateWindow(
+            "GFX demo",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            gWidth,
+            gHeight,
+            SDL_WINDOW_OPENGL);
+    if (win == nullptr)
+    {
+        std::cout << "SDL_CreateWindow error: " << SDL_GetError() << std::endl;
+        return 1;
     }
 
     SDL_GLContext glcontext = SDL_GL_CreateContext(win);
-    if(glcontext == nullptr)
+    if (glcontext == nullptr)
     {
         std::cout << "GL context error: " << SDL_GetError() << std::endl;
-	    return 1;
+        return 1;
     }
     SDL_GL_SetSwapInterval(1);
 
@@ -2324,14 +2343,17 @@ int run()
         // sgl::ProcessAxis();
 
         SDL_Event e;
-        while (SDL_PollEvent(&e)){
-	        if (e.type == SDL_QUIT){
-		        running = false;
-	        }
-	        else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE){
-		        running = false;
-	        }
-	        manager.onEvent(e);
+        while (SDL_PollEvent(&e))
+        {
+            if (e.type == SDL_QUIT)
+            {
+                running = false;
+            }
+            else if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+            {
+                running = false;
+            }
+            manager.onEvent(e);
         }
     }
 
@@ -2340,31 +2362,33 @@ int run()
 }
 
 
-int sdlmain()
+int
+sdlmain()
 {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0){
-		std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
-		return 1;
-	}
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
+    {
+        std::cerr << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        return 1;
+    }
     try
     {
         const auto r = run();
         SDL_Quit();
         return r;
     }
-    catch(const std::string& str)
+    catch (const std::string& str)
     {
         std::cerr << "ERROR: " << str << "\n";
         SDL_Quit();
         return 10;
     }
-    catch(const char* const str)
+    catch (const char* const str)
     {
         std::cerr << "ERROR: " << str << "\n";
         SDL_Quit();
         return 10;
     }
-    catch(...)
+    catch (...)
     {
         std::cerr << "unknown error\n";
         SDL_Quit();
@@ -2372,18 +2396,19 @@ int sdlmain()
     }
 }
 
-int main(int, char**)
+int
+main(int, char**)
 {
     std::ofstream out("log.txt");
-    std::streambuf *coutbuf = std::cout.rdbuf();
+    std::streambuf* coutbuf = std::cout.rdbuf();
     std::cout.rdbuf(out.rdbuf());
 
     std::ofstream eout("error.txt");
-    std::streambuf *cerrbuf = std::cerr.rdbuf();
+    std::streambuf* cerrbuf = std::cerr.rdbuf();
     std::cerr.rdbuf(eout.rdbuf());
 
     const auto r = sdlmain();
-    
+
     std::cout.rdbuf(coutbuf);
     std::cerr.rdbuf(cerrbuf);
 

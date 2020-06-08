@@ -49,4 +49,3 @@ Angle::inDegrees() const
 {
     return convert::radToDeg(mRadians);
 }
-

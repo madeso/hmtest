@@ -32,4 +32,3 @@ Degree(float value);
 
 
 #endif
-
