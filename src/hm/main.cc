@@ -17,10 +17,8 @@
 #include "hm/vec2.h"
 #include "hm/vec3.h"
 #include "hm/quat.h"
-
-#define Assert(condition, message) assert((condition) && message)
-
-std::string base_path;
+#include "hm/assert.h"
+#include "hm/vfs.h"
 
 // #define USE_FBO 1
 
@@ -557,7 +555,7 @@ public:
     LoadedImage(Engine*, const ImageDescription& pDescription)
     {
         int n = 0;
-        const auto path = base_path + pDescription.getFile();
+        const auto path = get_base_path() + pDescription.getFile();
         unsigned char* data = stbi_load(path.c_str(), &width, &height, &n, 4);
         if (data == nullptr)
         {
@@ -729,7 +727,7 @@ private:
 std::string
 loadFile(const std::string& pFileName)
 {
-    const auto path = base_path + pFileName;
+    const auto path = get_base_path() + pFileName;
     std::ifstream file(path.c_str());
     if (file.good())
     {
@@ -1492,7 +1490,7 @@ class Mesh
 public:
     explicit Mesh(const std::string& pFile)
     {
-        const auto path = base_path + pFile;
+        const auto path = get_base_path() + pFile;
         std::ifstream f(path.c_str());
         if (!f.good())
         {
@@ -2194,7 +2192,7 @@ main(int argc, char** argv)
             i += 1;
             if (i < argc)
             {
-                base_path = argv[i];
+                set_base_path(argv[i]);
             }
             else
             {

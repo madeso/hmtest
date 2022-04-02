@@ -5,7 +5,9 @@ set(app_src
     hm/quat.cc hm/quat.h
     hm/vec2.cc hm/vec2.h
     hm/vec3.cc hm/vec3.h
+    hm/vfs.cc hm/vfs.h
     hm/vecop.h
+    hm/assert.h
 
     hm/stb.cc
 )
