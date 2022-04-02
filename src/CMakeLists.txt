@@ -20,6 +20,7 @@ set(app_src
     hm/util.cc hm/util.h
     hm/image.cc hm/image.h
     hm/shader.cc hm/shader.h
+    hm/gridrender.cc hm/gridrender.h
     
     hm/texturerenderer.h
 
