@@ -24,9 +24,6 @@ using namespace std;
 
 std::string base_path;
 
-constexpr int gWidth = 800;
-constexpr int gHeight = 600;
-
 constexpr bool ONLY_RENDER_WORLD = false;
 // #define USE_FBO 1
 
@@ -131,12 +128,12 @@ renderFullscreenQuad()
 
 
 void
-setDisplay3d()
+setDisplay3d(int width, int height)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     // http://www.sjbaker.org/steve/omniv/love_your_z_buffer.html
-    gluPerspective(45.0f, float(gWidth) / float(gHeight), 0.5f, 100.0f);
+    gluPerspective(45.0f, float(width) / float(height), 0.5f, 100.0f);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glEnable(GL_DEPTH_TEST);
@@ -339,7 +336,7 @@ public:
     }
 
     virtual void
-    render() = 0;
+    render(int width, int height) = 0;
 
     virtual bool
     step(float pTime) = 0;
@@ -370,11 +367,11 @@ public:
         }
     }
     void
-    render()
+    render(int width, int height)
     {
         if (!mStack.empty())
         {
-            mStack.top()->render();
+            mStack.top()->render(width, height);
         }
     }
     void
@@ -1850,17 +1847,17 @@ public:
     {
     }
     void
-    render()
+    render(int width, int height)
     {
         glColor4f(1, 1, 1, 1);
         if (ONLY_RENDER_WORLD)
         {
-            renderWorld();
+            renderWorld(width, height);
         }
         else
         {
             textureRenderer.begin();
-            renderWorld();
+            renderWorld(width, height);
             textureRenderer.end();
 
             glDisable(GL_BLEND);
@@ -1974,10 +1971,10 @@ protected:
         glTranslated(inverted.getX(), inverted.getY(), inverted.getZ());
     }
     void
-    renderWorld()
+    renderWorld(int width, int height)
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        setDisplay3d();
+        setDisplay3d(width, height);
         rotateCamera();
         translateCamera();
         //shader.bind();
@@ -2026,7 +2023,7 @@ public:
     }
 
     void
-    render()
+    render(int, int) override
     {
         setDisplay2d();
         glDisable(GL_TEXTURE_2D);
@@ -2043,7 +2040,7 @@ public:
     }
 
     bool
-    step(float pTime)
+    step(float pTime) override
     {
         const float SIZE = 0.1;
         mTime += pTime;
@@ -2060,7 +2057,7 @@ public:
     }
 
     void
-    onEvent(const SDL_Event& pEvent)
+    onEvent(const SDL_Event& pEvent) override
     {
     }
 
@@ -2077,14 +2074,17 @@ private:
 int
 run()
 {
+    constexpr int width = 800;
+    constexpr int height = 600;
+
     cout << "Hello gfx demo\n";
 
     SDL_Window* win = SDL_CreateWindow(
             "GFX demo",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            gWidth,
-            gHeight,
+            width,
+            height,
             SDL_WINDOW_OPENGL);
     if (win == nullptr)
     {
@@ -2128,7 +2128,7 @@ run()
         manager.step(delta);
 
         glClear(GL_COLOR_BUFFER_BIT);
-        manager.render();
+        manager.render(width, height);
         SDL_GL_SwapWindow(win);
         // sgl::ProcessAxis();
 
