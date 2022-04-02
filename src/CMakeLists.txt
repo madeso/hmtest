@@ -19,6 +19,7 @@ set(app_src
     hm/texturerenderer.copy.cc hm/texturerenderer.copy.h
     hm/util.cc hm/util.h
     hm/image.cc hm/image.h
+    hm/shader.cc hm/shader.h
     
     hm/texturerenderer.h
 
