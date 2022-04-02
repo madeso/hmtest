@@ -11,6 +11,7 @@ class vec3
 public:
     // constructors
     vec3(float x, float y, float z);
+    vec3(const vec3& vec);
 
     // operators
     const vec3&

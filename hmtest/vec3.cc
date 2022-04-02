@@ -10,6 +10,14 @@ vec3::vec3(float x, float y, float z)
 }
 
 
+vec3::vec3(const vec3& vec)
+{
+    setX(vec.getX());
+    setY(vec.getY());
+    setZ(vec.getZ());
+}
+
+
 // operators
 const vec3&
 vec3::operator=(const vec3& vec)

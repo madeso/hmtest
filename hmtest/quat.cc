@@ -170,7 +170,7 @@ Quat::toAxisAngle(vec3* axis, Angle* theta) const
     assert(axis);
     assert(theta);
     const float len = length();
-    assert(equal(1.0f, length()));  // normalised
+    assert(equal(1.0f, len));  // normalised
     const float cosAngle = m_w;
     const float angle = acos(cosAngle) * 2;
     float sinAngle = squareRoot(1 - square(cosAngle));
@@ -183,7 +183,7 @@ Quat::toAxisAngle(vec3* axis, Angle* theta) const
                  m_y / sinAngle,
                  m_z / sinAngle);  //.getNormalized();
     *theta = Radian(angle);
-    const float l = axis->getLength();
+    // const float l = axis->getLength();
 }
 
 

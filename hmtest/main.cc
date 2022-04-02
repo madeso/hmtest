@@ -27,6 +27,8 @@
 
 using namespace std;
 
+std::string base_path;
+
 constexpr int gWidth = 800;
 constexpr int gHeight = 600;
 
@@ -564,18 +566,15 @@ protected:
 class LoadedImage
 {
 public:
-    LoadedImage(Engine* pEngine, const ImageDescription& pDescription)
+    LoadedImage(Engine*, const ImageDescription& pDescription)
     {
         int n = 0;
-        unsigned char* data = stbi_load(
-                pDescription.getFile().c_str(),
-                &width,
-                &height,
-                &n,
-                4);
+        const auto path = base_path + pDescription.getFile();
+        unsigned char* data = stbi_load(path.c_str(), &width, &height, &n, 4);
         if (data == nullptr)
         {
-            cerr << "failed to load " << pDescription.getFile();
+            cerr << "failed to load " << pDescription.getFile()
+                 << " resolved to " << path << "\n";
         }
         unsigned int tex = 0;
         glGenTextures(1, &tex);
@@ -610,7 +609,7 @@ public:
     {
         glDeleteTextures(1, &imageId);
     }
-    const int
+    int
     getId() const
     {
         return imageId;
@@ -633,9 +632,7 @@ Engine::getLoadedImage(const ImageDescription& pImageDesc)
 
 
 void
-Engine::unloadLoadedImage(
-        const ImageDescription& pImageDesc,
-        LoadedImage* pMedia)
+Engine::unloadLoadedImage(const ImageDescription& pImageDesc, LoadedImage*)
 {
     mImages.erase(mImages.find(pImageDesc));
 }
@@ -744,7 +741,8 @@ private:
 std::string
 loadFile(const std::string& pFileName)
 {
-    std::ifstream file(pFileName.c_str());
+    const auto path = base_path + pFileName;
+    std::ifstream file(path.c_str());
     if (file.good())
     {
         std::ostringstream ret;
@@ -754,7 +752,8 @@ loadFile(const std::string& pFileName)
     }
     else
     {
-        std::cerr << "Failed to load " << pFileName << "\n";
+        std::cerr << "Failed to load " << pFileName << " resolved to " << path
+                  << "\n";
     }
     return "";
 }
@@ -1151,8 +1150,8 @@ public:
             }
         }
 
-        const float widthSpan = 1.0 / (1 + MIDDLE_WIDTH);
-        const float heightSpan = 1.0 / (1 + MIDDLE_HEIGHT);
+        // const float widthSpan = 1.0 / (1 + MIDDLE_WIDTH);
+        // const float heightSpan = 1.0 / (1 + MIDDLE_HEIGHT);
         for (int x = 0; x < MIDDLE_WIDTH; ++x)
         {
             for (int y = 0; y < MIDDLE_HEIGHT; ++y)
@@ -1357,7 +1356,7 @@ struct Material
     void
     sendToGl()
     {
-#pragma warning(disable : 4244)
+        //#pragma warning(disable : 4244)
         const float alpha = mAlpha;
         float ambientArray[4] = {
                 mAmbient.getX(),
@@ -1388,7 +1387,7 @@ struct Material
         glMaterialfv(GL_FRONT, GL_EMISSION, emissionArray);
 
         glMaterialf(GL_FRONT, GL_SHININESS, mShininess);
-#pragma warning(default : 4244)
+        //#pragma warning(default : 4244)
     }
 
     vec3 mAmbient;
@@ -1505,9 +1504,11 @@ class Mesh
 public:
     explicit Mesh(const std::string& pFile)
     {
-        std::ifstream f(pFile.c_str());
+        const auto path = base_path + pFile;
+        std::ifstream f(path.c_str());
         if (!f.good())
         {
+            cerr << "Failed to load mesh " << pFile << " resolved to " << path;
             throw "Failed to load mesh";
         }
         std::string line;
@@ -1680,7 +1681,7 @@ protected:
                 GL_QUADRATIC_ATTENUATION,
                 light.attenuation.quadratic);
 
-#pragma warning(disable : 4244)
+        //#pragma warning(disable : 4244)
         float directionArray[3] = {
                 light.direction.getX(),
                 light.direction.getY(),
@@ -1714,7 +1715,7 @@ protected:
                 light.specular.getZ(),
                 1.0f};
         glLightfv(GL_LIGHT0, GL_SPECULAR, specularArray);
-#pragma warning(default : 4244)
+        //#pragma warning(default : 4244)
     }
     void
     drawAmbient()
@@ -2287,7 +2288,7 @@ private:
 int
 run()
 {
-    cout << "Hello gfx demo";
+    cout << "Hello gfx demo\n";
 
     SDL_Window* win = SDL_CreateWindow(
             "GFX demo",
@@ -2357,7 +2358,7 @@ run()
         }
     }
 
-    cout << "Goodbye heightmap demo";
+    cout << "Goodbye heightmap demo\n";
     return 0;
 }
 
@@ -2397,8 +2398,36 @@ sdlmain()
 }
 
 int
-main(int, char**)
+main(int argc, char** argv)
 {
+    bool console = false;
+
+    for (int i = 1; i < argc; i += 1)
+    {
+        const std::string a = argv[i];
+        if (a == "--console")
+        {
+            console = true;
+        }
+        else if (a == "--root")
+        {
+            i += 1;
+            if (i < argc)
+            {
+                base_path = argv[i];
+            }
+            else
+            {
+                cerr << "Invalid argument for --root\n";
+                return 42;
+            }
+        }
+    }
+
+    if (console)
+    {
+        return sdlmain();
+    }
     std::ofstream out("log.txt");
     std::streambuf* coutbuf = std::cout.rdbuf();
     std::cout.rdbuf(out.rdbuf());

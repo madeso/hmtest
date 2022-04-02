@@ -11,6 +11,8 @@ public:
     // constructors
     vec2(float x, float y);
 
+    vec2(const vec2& vec);
+
     // operators
     const vec2&
     operator=(const vec2& vec);

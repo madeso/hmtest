@@ -10,6 +10,13 @@ vec2::vec2(float x, float y)
 }
 
 
+vec2::vec2(const vec2& vec)
+{
+    setX(vec.getX());
+    setY(vec.getY());
+}
+
+
 // operators
 const vec2&
 vec2::operator=(const vec2& vec)
