@@ -17,6 +17,8 @@ set(app_src
     hm/loadedimage.cc hm/loadedimage.h
     hm/texturerenderer.fbo.cc hm/texturerenderer.fbo.h
     hm/texturerenderer.copy.cc hm/texturerenderer.copy.h
+    hm/util.cc hm/util.h
+    hm/image.cc hm/image.h
     
     hm/texturerenderer.h
 
@@ -25,7 +27,7 @@ set(app_src
     hm/templatemedia.h
     
     hm/stb.cc
-    
+
     hm/main.cc
 )
 
