@@ -6,8 +6,10 @@ set(app_src
     hm/vec2.cc hm/vec2.h
     hm/vec3.cc hm/vec3.h
     hm/vfs.cc hm/vfs.h
+    hm/opengl.cc hm/opengl.h
     hm/vecop.h
     hm/assert.h
+    hm/gl.h
 
     hm/stb.cc
 )
