@@ -11,6 +11,10 @@ set(app_src
     hm/assert.h
     hm/gl.h
 
+    hm/texturerenderer.h
+    hm/texturerenderer.fbo.cc hm/texturerenderer.fbo.h
+    hm/texturerenderer.copy.cc hm/texturerenderer.copy.h
+
     hm/stb.cc
 )
 
