@@ -15,6 +15,8 @@ set(app_src
     hm/state.cc hm/state.cc
     hm/statemanager.cc hm/statemanager.h
 
+    hm/imagedescription.cc hm/imagedescription.h
+
     hm/texturerenderer.h
     hm/texturerenderer.fbo.cc hm/texturerenderer.fbo.h
     hm/texturerenderer.copy.cc hm/texturerenderer.copy.h

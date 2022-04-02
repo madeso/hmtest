@@ -24,34 +24,10 @@
 #include "hm/texturerenderer.h"
 #include "hm/state.h"
 #include "hm/statemanager.h"
-
+#include "hm/imagedescription.h"
 
 class Media;
 class LoadedImage;
-
-
-class ImageDescription
-{
-public:
-    explicit ImageDescription(const std::string& pFileName) : mFile(pFileName)
-    {
-    }
-
-    const std::string&
-    getFile() const
-    {
-        return mFile;
-    }
-
-    bool
-    operator<(const ImageDescription& pOther) const
-    {
-        return mFile < pOther.mFile;
-    }
-
-private:
-    const std::string mFile;
-};
 
 
 class Engine
