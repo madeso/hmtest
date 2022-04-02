@@ -177,43 +177,43 @@ vec3::getNormalized() const
 float
 vec3::getX() const
 {
-    return data.x;
+    return x;
 }
 
 
 float
 vec3::getY() const
 {
-    return data.y;
+    return y;
 }
 
 
 float
 vec3::getZ() const
 {
-    return data.z;
+    return z;
 }
 
 
 // setters
 void
-vec3::setX(float x)
+vec3::setX(float ax)
 {
-    data.x = x;
+    x = ax;
 }
 
 
 void
-vec3::setY(float y)
+vec3::setY(float ay)
 {
-    data.y = y;
+    y = ay;
 }
 
 
 void
-vec3::setZ(float z)
+vec3::setZ(float az)
 {
-    data.z = z;
+    z = az;
 }
 
 
@@ -221,21 +221,21 @@ vec3::setZ(float z)
 float
 vec3::get(int member) const
 {
-    return data.array[member];
+    return (&x)[member];
 }
 
 
 void
 vec3::set(int member, float value)
 {
-    data.array[member] = value;
+    (&x)[member] = value;
 }
 
 
 const float*
 vec3::getArray() const
 {
-    return data.array;
+    return (&x);
 }
 
 

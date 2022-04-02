@@ -105,15 +105,8 @@ public:
     getArray() const;
 
 private:
-    union
-    {
-        float array[2];
-        struct
-        {
-            float x;
-            float y;
-        };
-    } data;
+    float x;
+    float y;
 };
 
 

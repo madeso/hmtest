@@ -165,36 +165,36 @@ vec2::normalize()
 float
 vec2::getX() const
 {
-    return data.x;
+    return x;
 }
 
 
 float
 vec2::getY() const
 {
-    return data.y;
+    return y;
 }
 
 
 const float*
 vec2::getArray() const
 {
-    return data.array;
+    return (&x);
 }
 
 
 // setters
 void
-vec2::setX(float x)
+vec2::setX(float ax)
 {
-    data.x = x;
+    x = ax;
 }
 
 
 void
-vec2::setY(float y)
+vec2::setY(float ay)
 {
-    data.y = y;
+    y = ay;
 }
 
 
@@ -223,14 +223,14 @@ vec2::getTruncated(float l) const
 float
 vec2::get(int member) const
 {
-    return data.array[member];
+    return (&x)[member];
 }
 
 
 void
 vec2::set(int member, float value)
 {
-    data.array[member] = value;
+    (&x)[member] = value;
 }
 
 

@@ -113,16 +113,9 @@ public:
     getArray() const;
 
 private:
-    union
-    {
-        float array[3];
-        struct
-        {
-            float x;
-            float y;
-            float z;
-        };
-    } data;
+    float x;
+    float y;
+    float z;
 };
 
 
