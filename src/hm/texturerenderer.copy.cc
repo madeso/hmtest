@@ -1,6 +1,6 @@
 #include "hm/texturerenderer.copy.h"
 
-#include "hm/gl.h"
+#include "hm/dep_gl.h"
 #include "hm/opengl.h"
 
 TextureRendererCopy::TextureRendererCopy(int w, int h) : width(w), height(h)

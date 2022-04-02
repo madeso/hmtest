@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-#include "hm/gl.h"
+#include "hm/dep_gl.h"
 #include "hm/opengl.h"
 
 

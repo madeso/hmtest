@@ -14,3 +14,6 @@ renderFullscreenQuad();
 
 void
 setDisplay3d(int width, int height);
+
+void
+rectangle(float x, float y, float w, float h);

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "hm/gl.h"
+#include "hm/dep_gl.h"
 
 void
 doCheckOpengl()
@@ -116,4 +116,14 @@ setDisplay3d(int width, int height)
     glClear(GL_DEPTH_BUFFER_BIT);
 
     doCheckOpengl();
+}
+
+
+void
+rectangle(float x, float y, float w, float h)
+{
+    glVertex2d(x, y);
+    glVertex2d(x, y + h);
+    glVertex2d(x + w, y + h);
+    glVertex2d(x + w, y);
 }

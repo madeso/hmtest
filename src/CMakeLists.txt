@@ -9,7 +9,11 @@ set(app_src
     hm/opengl.cc hm/opengl.h
     hm/vecop.h
     hm/assert.h
-    hm/gl.h
+    hm/dep_gl.h
+    hm/dep_sdl.h
+
+    hm/state.cc hm/state.cc
+    hm/statemanager.cc hm/statemanager.h
 
     hm/texturerenderer.h
     hm/texturerenderer.fbo.cc hm/texturerenderer.fbo.h

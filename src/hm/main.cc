@@ -11,8 +11,9 @@
 #include <memory>
 
 #include "stb_image.h"
-#include "SDL.h"
-#include "GL/glew.h"
+
+#include "hm/dep_sdl.h"
+#include "hm/dep_gl.h"
 
 #include "hm/vec2.h"
 #include "hm/vec3.h"
@@ -21,78 +22,8 @@
 #include "hm/vfs.h"
 #include "hm/opengl.h"
 #include "hm/texturerenderer.h"
-
-
-
-
-void
-rectangle(float x, float y, float w, float h)
-{
-    glVertex2d(x, y);
-    glVertex2d(x, y + h);
-    glVertex2d(x + w, y + h);
-    glVertex2d(x + w, y);
-}
-
-
-class State
-{
-public:
-    virtual ~State()
-    {
-    }
-
-    virtual void
-    render(int width, int height) = 0;
-
-    virtual bool
-    step(float pTime) = 0;
-
-    virtual void
-    onEvent(const SDL_Event& pEvent) = 0;
-};
-
-
-class StateManager
-{
-public:
-    void
-    addState(State* pState)
-    {
-        std::shared_ptr<State> state(pState);
-        mStack.push(state);
-    }
-    void
-    step(float pTime)
-    {
-        if (!mStack.empty())
-        {
-            if (!mStack.top()->step(pTime))
-            {
-                mStack.pop();
-            }
-        }
-    }
-    void
-    render(int width, int height)
-    {
-        if (!mStack.empty())
-        {
-            mStack.top()->render(width, height);
-        }
-    }
-    void
-    onEvent(const SDL_Event& pEvent)
-    {
-        if (!mStack.empty())
-        {
-            mStack.top()->onEvent(pEvent);
-        }
-    }
-
-private:
-    std::stack<std::shared_ptr<State>> mStack;
-};
+#include "hm/state.h"
+#include "hm/statemanager.h"
 
 
 class Media;
