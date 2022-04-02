@@ -22,7 +22,6 @@
 
 std::string base_path;
 
-constexpr bool ONLY_RENDER_WORLD = false;
 // #define USE_FBO 1
 
 
@@ -1848,23 +1847,17 @@ public:
     render(int width, int height)
     {
         glColor4f(1, 1, 1, 1);
-        if (ONLY_RENDER_WORLD)
-        {
-            renderWorld(width, height);
-        }
-        else
-        {
-            textureRenderer.begin();
-            renderWorld(width, height);
-            textureRenderer.end();
+        
+        textureRenderer.begin();
+        renderWorld(width, height);
+        textureRenderer.end();
 
-            glDisable(GL_BLEND);
-            glDisable(GL_CULL_FACE);
-            glEnable(GL_TEXTURE_2D);
-            grid.render();
-            //textureRenderer.bindImage();
-            //renderFullscreenQuad();
-        }
+        glDisable(GL_BLEND);
+        glDisable(GL_CULL_FACE);
+        glEnable(GL_TEXTURE_2D);
+        grid.render();
+        //textureRenderer.bindImage();
+        //renderFullscreenQuad();
     }
     bool
     step(float pTime)
