@@ -20,8 +20,6 @@
 
 #define Assert(condition, message) assert((condition) && message)
 
-using namespace std;
-
 std::string base_path;
 
 constexpr bool ONLY_RENDER_WORLD = false;
@@ -564,7 +562,7 @@ public:
         unsigned char* data = stbi_load(path.c_str(), &width, &height, &n, 4);
         if (data == nullptr)
         {
-            cerr << "failed to load " << pDescription.getFile()
+            std::cerr << "failed to load " << pDescription.getFile()
                  << " resolved to " << path << "\n";
         }
         unsigned int tex = 0;
@@ -1454,7 +1452,7 @@ toInt(const std::string& str)
 Index
 toIndex(const std::string& str)
 {
-    vector<std::string> indexData;
+    std::vector<std::string> indexData;
     splitString('/', str, &indexData);
     if (indexData.size() != 3)
     {
@@ -1499,7 +1497,7 @@ public:
         std::ifstream f(path.c_str());
         if (!f.good())
         {
-            cerr << "Failed to load mesh " << pFile << " resolved to " << path;
+            std::cerr << "Failed to load mesh " << pFile << " resolved to " << path;
             throw "Failed to load mesh";
         }
         std::string line;
@@ -2077,7 +2075,7 @@ run()
     constexpr int width = 800;
     constexpr int height = 600;
 
-    cout << "Hello gfx demo\n";
+    std::cout << "Hello gfx demo\n";
 
     SDL_Window* win = SDL_CreateWindow(
             "GFX demo",
@@ -2147,7 +2145,7 @@ run()
         }
     }
 
-    cout << "Goodbye heightmap demo\n";
+    std::cout << "Goodbye heightmap demo\n";
     return 0;
 }
 
@@ -2207,7 +2205,7 @@ main(int argc, char** argv)
             }
             else
             {
-                cerr << "Invalid argument for --root\n";
+                std::cerr << "Invalid argument for --root\n";
                 return 42;
             }
         }
