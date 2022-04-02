@@ -1,17 +1,17 @@
 set(app_src
-  angle.cc angle.h
-  main.cc
-  hmmath.cc hmmath.h
-  quat.cc quat.h
-  vec2.cc vec2.h
-  vec3.cc vec3.h
-  vecop.h
+    hm/angle.cc hm/angle.h
+    hm/main.cc
+    hm/math.cc hm/math.h
+    hm/quat.cc hm/quat.h
+    hm/vec2.cc hm/vec2.h
+    hm/vec3.cc hm/vec3.h
+    hm/vecop.h
 
-  stb.cc
+    hm/stb.cc
 )
 
 set(glew_src
-../external/glew/src/glew.c
+    ../external/glew/src/glew.c
 )
 
 
@@ -19,4 +19,5 @@ source_group("" FILES ${app_src})
 source_group("glew" FILES ${glew_src})
 add_executable(hmtest WIN32 MACOSX_BUNDLE ${app_src} ${glew_src})
 target_include_directories(hmtest SYSTEM PRIVATE ${SDL2_INCLUDE_DIR})
+target_include_directories(hmtest PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(hmtest ${SDL2_LIBRARY} ${OPENGL_LIBRARIES})

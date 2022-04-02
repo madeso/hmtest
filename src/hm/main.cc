@@ -9,14 +9,14 @@
 #include <sstream>
 #include <cassert>
 #include <memory>
-#include "stb_image.h"
 
+#include "stb_image.h"
 #include "SDL.h"
 #include "GL/glew.h"
 
-#include "vec2.h"
-#include "vec3.h"
-#include "quat.h"
+#include "hm/vec2.h"
+#include "hm/vec3.h"
+#include "hm/quat.h"
 
 #define Assert(condition, message) assert((condition) && message)
 

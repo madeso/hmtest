@@ -1,5 +1,5 @@
-#include "angle.h"
-#include "hmmath.h"
+#include "hm/angle.h"
+#include "hm/math.h"
 
 namespace convert
 {

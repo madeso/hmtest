@@ -1,9 +1,9 @@
 #ifndef VEC3_HPP
 #define VEC3_HPP
 
-#include "vecop.h"
-#include "hmmath.h"
-#include "angle.h"
+#include "hm/vecop.h"
+#include "hm/math.h"
+#include "hm/angle.h"
 
 
 class vec3

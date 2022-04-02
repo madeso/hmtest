@@ -1,4 +1,5 @@
-#include "vec3.h"
+#include "hm/vec3.h"
+
 #include <cmath>
 #include <cassert>
 

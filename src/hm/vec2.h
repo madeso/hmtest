@@ -1,8 +1,8 @@
 #ifndef VEC2_HPP
 #define VEC2_HPP
 
-#include "vecop.h"
-#include "hmmath.h"
+#include "hm/vecop.h"
+#include "hm/math.h"
 
 
 class vec2

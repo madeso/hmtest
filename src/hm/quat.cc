@@ -1,6 +1,6 @@
-#include "quat.h"
-#include "vec3.h"
-#include "hmmath.h"
+#include "hm/quat.h"
+#include "hm/vec3.h"
+#include "hm/math.h"
 #include <cassert>
 
 using namespace math;

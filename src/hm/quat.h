@@ -1,8 +1,8 @@
 #ifndef QUATERNION_HPP
 #define QUATERNION_HPP
 
-#include "vec3.h"
-#include "angle.h"
+#include "hm/vec3.h"
+#include "hm/angle.h"
 
 
 class Quat

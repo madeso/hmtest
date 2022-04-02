@@ -56,5 +56,5 @@ include_directories(SYSTEM external/stb)
 include_directories(SYSTEM external/glew/include)
 add_definitions(/DGLEW_STATIC)
 
-add_subdirectory(hmtest)
+add_subdirectory(src)
 
