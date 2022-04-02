@@ -33,8 +33,8 @@ constexpr int gWidth = 800;
 constexpr int gHeight = 600;
 
 constexpr bool ONLY_RENDER_WORLD = false;
-constexpr bool FULLSCREEN = false;
-//#define USE_FBO 1
+// constexpr bool FULLSCREEN = false;
+// #define USE_FBO 1
 
 
 void
@@ -56,7 +56,7 @@ doCheckOpengl()
             ERROR_VALUE(GL_OUT_OF_MEMORY);
         }
 #undef ERROR_VALUE
-        std::cerr << "Opengl error: " << error << value << std::endl;
+        std::cerr << "Opengl error: " << error << ": " << value << std::endl;
     }
 }
 
@@ -1585,18 +1585,7 @@ class World
 {
 public:
     explicit World(Engine* pEngine)
-        : waterDisp(0)
-        , px(10)
-        , py(5)
-        , pz(20)
-        , nx(-10)
-        , ny(-1.1)
-        , wy(-2)
-        , by(-5.0)
-        , nz(-5)
-        , zs(10)
-        , ze(17)
-        , wall(pEngine, ImageDescription("images/wand.bmp"))
+        : wall(pEngine, ImageDescription("images/wand.bmp"))
         , water(pEngine, ImageDescription("images/water512.jpg"))
         , spotImage(pEngine, ImageDescription("images/spot.png"))
         , hasSpot(false)
@@ -1613,8 +1602,6 @@ public:
     void
     step(float pTime)
     {
-        waterDisp += pTime * 0.02;
-        if (waterDisp > 1) waterDisp -= 1;
     }
 
     void
@@ -1824,6 +1811,7 @@ protected:
 
         glDepthMask(GL_TRUE);
     }
+
     void
     drawScene(bool applyTexture, bool doTransparent)
     {
@@ -1831,201 +1819,8 @@ protected:
         if (applyTexture) glBindTexture(GL_TEXTURE_2D, wall->getId());
         mesh.render();
     }
-    void
-    drawScene_old(bool applyTexture, bool doTransparent)
-    {
-        Material().sendToGl();
-
-        if (applyTexture) glBindTexture(GL_TEXTURE_2D, wall->getId());
-
-        glBegin(GL_QUADS);
-        // Top Face
-        glNormal3f(0.0f, -1.0f, 0.0f);
-        glTexCoord2d(0.0, (pz - nz) / 4);
-        glVertex3d(nx, py, nz);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(nx, py, pz);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(px, py, pz);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, (pz - nz) / 4);
-        glVertex3d(px, py, nz);  // Top Right Of The Texture and Quad
-        glEnd();
-
-        glBegin(GL_QUADS);
-        glNormal3f(0.0f, 1.0f, 0.0f);
-
-        // Bottom Face -start
-        glTexCoord2d((px - nx) / 4, (zs - nz) / 4);
-        glVertex3d(nx, ny, nz);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (zs - nz) / 4);
-        glVertex3d(px, ny, nz);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, ny, zs);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(nx, ny, zs);  // Bottom Right Of The Texture and Quad
-
-        // Bottom Face - end
-        glTexCoord2d((px - nx) / 4, (pz - ze) / 4);
-        glVertex3d(nx, ny, ze);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (pz - ze) / 4);
-        glVertex3d(px, ny, ze);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, ny, pz);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(nx, ny, pz);  // Bottom Right Of The Texture and Quad
-        glEnd();
-
-        glBegin(GL_QUADS);
-        // Right face
-        glNormal3f(-1.0f, 0.0f, 0.0f);
-        glTexCoord2d((ze - zs) / 4, 0.0);
-        glVertex3d(px, by, zs);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((ze - zs) / 4, (ny - by) / 4);
-        glVertex3d(px, ny, zs);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (ny - by) / 4);
-        glVertex3d(px, ny, ze);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, by, ze);  // Bottom Left Of The Texture and Quad
-        // Left Face
-        glNormal3f(1.0f, 0.0f, 0.0f);
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(nx, by, zs);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((ze - zs) / 4, 0.0);
-        glVertex3d(nx, by, ze);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((ze - zs) / 4, (ny - by) / 4);
-        glVertex3d(nx, ny, ze);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (ny - by) / 4);
-        glVertex3d(nx, ny, zs);  // Top Left Of The Texture and Quad
-        // back Face
-        glNormal3f(0.0f, 0.0f, -1.0f);
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(nx, by, ze);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(px, by, ze);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, (ny - by) / 4);
-        glVertex3d(px, ny, ze);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (ny - by) / 4);
-        glVertex3d(nx, ny, ze);  // Top Left Of The Texture and Quad
-        // front Face
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(nx, by, zs);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, (ny - by) / 4);
-        glVertex3d(nx, ny, zs);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (ny - by) / 4);
-        glVertex3d(px, ny, zs);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, by, zs);  // Bottom Left Of The Texture and Quad
-        glEnd();
-        glBegin(GL_QUADS);
-        // Bottom Face
-        glNormal3f(0.0f, 1.0f, 0.0f);
-        glTexCoord2d((px - nx) / 4, (ze - zs) / 4);
-        glVertex3d(nx, by, zs);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (ze - zs) / 4);
-        glVertex3d(px, by, zs);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, by, ze);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(nx, by, ze);  // Bottom Right Of The Texture and Quad
-        glEnd();
-
-        glBegin(GL_QUADS);
-        // Right face
-        glNormal3f(-1.0f, 0.0f, 0.0f);
-        glTexCoord2d((pz - nz) / 4, 0.0);
-        glVertex3d(px, ny, nz);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((pz - nz) / 4, (py - ny) / 4);
-        glVertex3d(px, py, nz);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (py - ny) / 4);
-        glVertex3d(px, py, pz);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, ny, pz);  // Bottom Left Of The Texture and Quad
-        // Left Face
-        glNormal3f(1.0f, 0.0f, 0.0f);
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(nx, ny, nz);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((pz - nz) / 4, 0.0);
-        glVertex3d(nx, ny, pz);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((pz - nz) / 4, (py - ny) / 4);
-        glVertex3d(nx, py, pz);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (py - ny) / 4);
-        glVertex3d(nx, py, nz);  // Top Left Of The Texture and Quad
-        // back Face
-        glNormal3f(0.0f, 0.0f, -1.0f);
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(nx, ny, pz);  // Bottom Left Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(px, ny, pz);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, (py - ny) / 4);
-        glVertex3d(px, py, pz);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (py - ny) / 4);
-        glVertex3d(nx, py, pz);  // Top Left Of The Texture and Quad
-        // front Face
-        glNormal3f(0.0f, 0.0f, 1.0f);
-        glTexCoord2d((px - nx) / 4, 0.0);
-        glVertex3d(nx, ny, nz);  // Bottom Right Of The Texture and Quad
-        glTexCoord2d((px - nx) / 4, (py - ny) / 4);
-        glVertex3d(nx, py, nz);  // Top Right Of The Texture and Quad
-        glTexCoord2d(0.0, (py - ny) / 4);
-        glVertex3d(px, py, nz);  // Top Left Of The Texture and Quad
-        glTexCoord2d(0.0, 0.0);
-        glVertex3d(px, ny, nz);  // Bottom Left Of The Texture and Quad
-        glEnd();
-
-        if (false && doTransparent)
-        {
-            if (applyTexture) glBindTexture(GL_TEXTURE_2D, water->getId());
-            Material m;
-            m.mAlpha = 0.5;
-            m.sendToGl();
-            // translate water coords
-            glMatrixMode(GL_TEXTURE);
-            glLoadIdentity();
-            glTranslated(
-                    0.25 * math::sin(waterDisp * 2 * math::PI),
-                    0.25 * math::cos(waterDisp * 2 * math::PI),
-                    0);
-            glMatrixMode(GL_MODELVIEW);
-            glBegin(GL_QUADS);
-            // Bottom Face -start
-            glNormal3f(0.0f, 1.0f, 0.0f);
-            glTexCoord2d((px - nx) / 4, (ze - zs) / 4);
-            glVertex3d(nx, wy, zs);  // Top Right Of The Texture and Quad
-            glTexCoord2d(0.0, (ze - zs) / 4);
-            glVertex3d(px, wy, zs);  // Top Left Of The Texture and Quad
-            glTexCoord2d(0.0, 0.0);
-            glVertex3d(px, wy, ze);  // Bottom Left Of The Texture and Quad
-            glTexCoord2d((px - nx) / 4, 0.0);
-            glVertex3d(nx, wy, ze);  // Bottom Right Of The Texture and Quad
-            glEnd();
-            // restore matrix
-            glMatrixMode(GL_TEXTURE);
-            glLoadIdentity();
-            glMatrixMode(GL_MODELVIEW);
-            Material().sendToGl();
-        }
-    }
 
 private:
-    // water displacement
-    float waterDisp;
-    //positive negative
-    const float px;
-    const float py;
-    const float pz;
-
-    const float nx;
-    const float ny;
-    const float nz;
-
-    const float wy;  // water
-    const float by;  // bottom
-
-    // start end
-    const float zs;
-    const float ze;
-
     Image wall;
     Image water;
     Image spotImage;
