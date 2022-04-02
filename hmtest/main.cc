@@ -1,4 +1,3 @@
-// #include "sgl.h"
 #include <iostream>
 #include <stack>
 #include <map>
@@ -10,14 +9,11 @@
 #include <sstream>
 #include <cassert>
 #include <memory>
-// #include "boost/tokenizer.h"
-// #include "boost/smart_ptr.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #include "SDL.h"
 #include "GL/glew.h"
-// #include "SDL_opengl.h"
 
 #include "vec2.h"
 #include "vec3.h"
@@ -33,7 +29,6 @@ constexpr int gWidth = 800;
 constexpr int gHeight = 600;
 
 constexpr bool ONLY_RENDER_WORLD = false;
-// constexpr bool FULLSCREEN = false;
 // #define USE_FBO 1
 
 
