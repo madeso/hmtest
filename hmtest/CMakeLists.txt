@@ -6,6 +6,8 @@ set(app_src
   vec2.cc vec2.h
   vec3.cc vec3.h
   vecop.h
+
+  stb.cc
 )
 
 set(glew_src
