@@ -29,6 +29,7 @@ loadFile(const std::string& pFileName)
     return "";
 }
 
+
 float
 randomSign()
 {
@@ -79,6 +80,16 @@ toReal(const std::string& str)
 {
     std::istringstream s(str);
     float r;
+    s >> r;
+    return r;
+}
+
+
+int
+toInt(const std::string& str)
+{
+    std::istringstream s(str);
+    int r;
     s >> r;
     return r;
 }

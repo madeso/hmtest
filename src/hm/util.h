@@ -26,3 +26,5 @@ trim(const std::string& s, const std::string& drop = " ");
 float
 toReal(const std::string& str);
 
+int
+toInt(const std::string& str);

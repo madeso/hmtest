@@ -21,6 +21,11 @@ set(app_src
     hm/image.cc hm/image.h
     hm/shader.cc hm/shader.h
     hm/gridrender.cc hm/gridrender.h
+    hm/material.cc hm/material.h
+    hm/light.cc hm/light.h
+    hm/mesh.cc hm/mesh.h
+    hm/world.cc hm/world.h
+    hm/loading.cc hm/loading.h
     
     hm/texturerenderer.h
 
